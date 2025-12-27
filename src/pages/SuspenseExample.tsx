@@ -18,7 +18,7 @@ export default function SuspenseExample() {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="container mx-auto px-4 py-8 max-w-4xl pt-36">
             <h1 className="text-4xl font-bold mb-8">React Suspense Example</h1>
 
             {/* Example 1: Chart with sized fallback */}

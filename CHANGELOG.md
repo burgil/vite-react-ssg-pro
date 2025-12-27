@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2025-12-27
+
+### Added
+- Open Graph images for Home, About, and Suspense pages.
+
+### Changed
+- Updated project dependencies.
+
+### Fixed
+- Missing top padding in the suspense example.
+
 ## [1.0.0] - 2025-12-27
 
 ### Initial Release
