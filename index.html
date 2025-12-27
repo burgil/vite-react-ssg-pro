@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" className="dark scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Preconnect to font origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Async Font Loading Strategy with font-display: optional for zero CLS -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&family=Outfit:wght@400;700&display=optional"
+    rel="stylesheet"
+    media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&family=Outfit:wght@400;700&display=optional"
+      rel="stylesheet">
+  </noscript>
+
+  <!-- Inline Critical CSS -->
+  <style>
+    :root {
+      --font-inter: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Outfit', sans-serif;
+      --background: #020204;
+      --foreground: #ededed;
+    }
+    body {
+      color: var(--foreground);
+      background: var(--background);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Critical utilities often used above-the-fold */
+    .bg-black { background-color: #000; }
+    .text-white { color: #fff; }
+    .min-h-screen { min-height: 100vh; }
+  </style>
+</head>
+
+<body class="font-sans antialiased bg-[#020204] text-white selection:bg-blue-500/30 selection:text-blue-100">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

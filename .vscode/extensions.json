@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "ms-python.python",
+        "bradlc.vscode-tailwindcss"
+    ]
+}

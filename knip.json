@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "ignore": [
+    "scripts/**",
+    "unused/**",
+    "dist/**",
+    "public/**",
+    ".github/**",
+    ".agent/**",
+    ".vscode/**",
+    ".cursor/**",
+    "docs/**"
+  ],
+  "workspaces": {
+    "default": {
+      "project": ["./src/**/*.{ts,tsx}"]
+    }
+  }
+}

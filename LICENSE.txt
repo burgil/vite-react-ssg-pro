@@ -1,0 +1,28 @@
+Commercial License
+
+Copyright (c) 2025 Burgil
+
+This software is licensed for commercial use. By purchasing this template,
+you have been granted:
+
+✅ Unlimited use in personal and commercial projects
+✅ Use in closed-source applications
+✅ Building client websites for profit
+✅ Creating SaaS products with paid subscriptions
+✅ Full modification rights
+✅ No attribution required
+
+RESTRICTIONS:
+- You may not resell the unmodified template as your own product
+- You may not redistribute the template to non-license holders
+
+SUPPORT:
+Commercial license holders receive priority support.
+Contact: https://github.com/burgil
+
+FREE VERSION:
+A legacy MIT-licensed version is available at:
+https://github.com/burgil/create-app
+(Note: Unmaintained, no new updates)
+
+For the latest features and support, use this commercial version.

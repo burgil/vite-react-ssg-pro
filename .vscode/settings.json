@@ -1,0 +1,28 @@
+{
+    "files.exclude": {
+        "vite.config.ts": false,
+        "eslint.config.mjs": true,
+        "node_modules": true,
+        ".gitignore": false,
+        ".wrangler": true,
+        "pnpm-lock.yaml": true,
+        "pnpm-workspace.yaml": true,
+        "tsconfig.app.json": false,
+        "tsconfig.json": true,
+        "tsconfig.node.json": true,
+        "knip.json": true,
+        "src/vite-env.d.ts": true,
+        "dist": true,
+    },
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "css": "css"
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+}
