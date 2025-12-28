@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.4.0] - 2025-12-28
+## [1.4.0] - 2025-12-29
 
 ### Changed
 - Removed `@react-scan/vite-plugin-react-scan` dependency from package.json and lockfile
