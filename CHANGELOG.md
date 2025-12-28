@@ -9,6 +9,7 @@
 - Moved `seo.json` to `src/seo.json` for better organization and import support.
 - Updated all code, scripts, and documentation to reference `src/seo.json` instead of the project root.
 - Updated OG image and sitemap generation scripts to use the new path.
+- Updated OG image generator to avoid requiring preview if not needed.
 
 ### Fixed
 - Ensured all SEO metadata is injected at build time for every route, improving SSG output and SEO consistency.
