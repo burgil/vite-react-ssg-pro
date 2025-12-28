@@ -103,7 +103,7 @@ export default defineConfig(() => {
       deleteOriginFile: false,
     }),
     enableAnalyzer && visualizer({
-      filename: 'dist/stats.html',
+      filename: 'stats.html',
       gzipSize: true,
       brotliSize: true,
       template: 'sunburst',

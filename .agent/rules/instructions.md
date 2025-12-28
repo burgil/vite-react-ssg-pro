@@ -65,7 +65,7 @@ pnpm build            # Full build: lint → core:build → og-screenshots
 pnpm core:build       # Build + prerender (no OG screenshots)
 pnpm prerender        # Regenerate SSR/SSG HTML with critical CSS
 pnpm og-screenshots   # Generate OG images from live pages
-pnpm analyze          # Build with bundle analyzer (opens dist/stats.html)
+pnpm analyze          # Build with bundle analyzer (opens stats.html)
 ```
 
 ### Linting
@@ -378,7 +378,7 @@ pnpm core:build
 ### Bundle Analysis
 ```bash
 ANALYZE=true pnpm core:build
-# Opens dist/stats.html in browser
+# Opens stats.html in browser
 ```
 
 ---

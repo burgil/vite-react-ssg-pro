@@ -3,7 +3,13 @@
     "src/**/*"
   ],
   "exclude": [
-    "public"
+    "README.md",
+    "dist",
+    "public",
+    ".vscode",
+    ".wrangler",
+    ".github",
+    "docs"
   ],
   "compilerOptions": {
     "paths": {
@@ -20,10 +26,13 @@
       "DOM.Iterable",
       "WebWorker"
     ],
+    "types": [
+      "vite/client"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
@@ -46,7 +55,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": true,
-    "allowUnusedLabels": true,
-    "isolatedDeclarations": false,
+    "allowUnusedLabels": true
   }
 }

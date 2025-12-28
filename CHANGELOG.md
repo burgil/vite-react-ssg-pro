@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.0] - 2025-12-28
+
+### Changed
+- Removed `@react-scan/vite-plugin-react-scan` dependency from package.json and lockfile
+- Improved TypeScript configuration with better exclude patterns and updated compiler options
+- Fixed bundle analyzer output path from `dist/stats.html` to `stats.html`
+- Updated documentation to reflect correct bundle analyzer file location
+
+### Removed
+- React Scan development plugin and related dependencies
+
 ## [1.3.0] - 2025-12-28
 
 ### Changed

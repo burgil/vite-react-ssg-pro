@@ -304,7 +304,7 @@ Use bundle analyzer:
 
 ```bash
 ANALYZE=true pnpm core:build
-# Opens dist/stats.html in browser
+# Opens stats.html in browser
 ```
 
 ---

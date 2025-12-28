@@ -155,7 +155,7 @@ pnpm prerender
 # Generate Open Graph images from live pages
 pnpm og-screenshots
 
-# Analyze bundle size (generates dist/stats.html)
+# Analyze bundle size (generates stats.html)
 pnpm run build
 ANALYZE=true pnpm core:build
 ```
@@ -301,7 +301,7 @@ View bundle composition with:
 ANALYZE=true pnpm core:build
 ```
 
-Opens `dist/stats.html` with interactive visualization showing:
+Opens `stats.html` with interactive visualization showing:
 - Chunk sizes (raw, gzip, brotli)
 - Module composition
 - Dependency tree
