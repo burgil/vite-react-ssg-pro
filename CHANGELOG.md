@@ -4,13 +4,15 @@
 
 ### Added
 - SEO configuration file (`src/seo.json`) with global and page-specific metadata for Vite React SSG Pro, including Open Graph, Twitter Card, and Schema.org support.
+- README note about hidden files in `.vscode/settings.json` to help users find important config/scripts.
 
 ### Changed
 - Moved `seo.json` to `src/seo.json` for better organization and import support.
 - Updated all code, scripts, and documentation to reference `src/seo.json` instead of the project root.
 - Updated OG image and sitemap generation scripts to use the new path.
 - Updated OG image generator to avoid requiring preview if not needed.
-- Updated `.vscode/settings.json` to show important files (such as `seo.json`, scripts, and configuration files) that were previously hidden, improving quality of life for development and editing.
+- Improved `.vscode/settings.json` to show important files (such as `seo.json`, scripts, and configuration files) that were previously hidden, improving quality of life for development and editing.
+- Updated README and changelog to reflect these changes.
 
 ### Fixed
 - Ensured all SEO metadata is injected at build time for every route, improving SSG output and SEO consistency.
