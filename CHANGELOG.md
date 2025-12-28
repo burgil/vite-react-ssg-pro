@@ -35,7 +35,7 @@ Production-ready Vite + React 19 template with SSG capabilities achieving 100/10
 #### Performance Pipeline
 - **Beasties** critical CSS inlining (40-50KB inline, <1KB external)
 - **Terser** 3-pass minification with aggressive mangling
-- **Happy-DOM** SSR prerendering engine
+- **Happy-DOM** SSR/SSG prerendering engine
 - **Dual compression** (gzip + brotli) for all assets
 - **Font optimization** with font-display: optional (zero CLS)
 - **Auto-generated** sitemap.xml, robots.txt, OG images

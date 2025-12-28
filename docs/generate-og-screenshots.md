@@ -1,10 +1,10 @@
 # Generate OG Screenshots
 
-This guide explains how to automatically generate Open Graph (OG) images for routes defined in `seo.json` using the `scripts/generate_og_screenshots.py` script.
+This guide explains how to automatically generate Open Graph (OG) images for routes defined in `src/seo.json` using the `scripts/generate_og_screenshots.py` script.
 
 ## Overview
 
-The script scans `seo.json` routes and creates missing screenshots for `ogImage` references. Screenshots are captured using Playwright (headless Chromium) at 1200x630 and saved as WebP images under `public/images/og/`.
+The script scans `src/seo.json` routes and creates missing screenshots for `ogImage` references. Screenshots are captured using Playwright (headless Chromium) at 1200x630 and saved as WebP images under `public/images/og/`.
 
 The template also exposes a `pnpm og-screenshots` script to make running this easier. For a full local workflow (build + OG generation), run:
 
@@ -43,7 +43,7 @@ Then run the OG screenshot generator in another terminal:
 
 ```bash
 # Using Python directly
-python scripts/generate_og_screenshots.py --host localhost --port 4173 --seo seo.json --out public
+python scripts/generate_og_screenshots.py --host localhost --port 4173 --seo src/seo.json --out public
 
 # Or use the npm/pnpm script
 pnpm og-screenshots
@@ -55,7 +55,7 @@ The `pnpm og-screenshots` script will generate missing screenshots and cleanup o
 
 - `--host`: Hostname (default: `localhost`)
 - `--port`: Port that dev server is running (default: `4173`)
-- `--seo`: Path to `seo.json` (default: `seo.json`)
+- `--seo`: Path to `seo.json` (default: `src/seo.json`)
 - `--out`: Output directory (default: `public`)
 - `--overwrite`: Overwrite existing images
 - `--cleanup`: Delete unreferenced OG images in `public/images/og/` (default: skip)
@@ -91,7 +91,7 @@ For CI pipelines, you can run a headless build and OG generation step. Example:
 ```bash
 pnpm install
 pnpm build
-python scripts/generate_og_screenshots.py --host 127.0.0.1 --port $PORT --seo seo.json --out public --overwrite
+python scripts/generate_og_screenshots.py --host 127.0.0.1 --port $PORT --seo src/seo.json --out public --overwrite
 ```
 
 ## Troubleshooting

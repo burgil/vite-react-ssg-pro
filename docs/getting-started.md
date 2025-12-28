@@ -63,8 +63,8 @@ my-app/
 │   ├── pages/           # Route components
 │   ├── Layout.tsx       # Page wrapper with SEO
 │   ├── Router.tsx       # Route definitions
-│   └── main.tsx         # App entry point
-├── seo.json             # SEO metadata per route
+│   ├── main.tsx         # App entry point
+│   └── seo.json         # SEO metadata per route
 ├── vite.config.ts       # Vite configuration
 └── package.json         # Dependencies and scripts
 ```
@@ -113,7 +113,7 @@ const Contact = lazy(() => import('./pages/contact'));
 3. **Add SEO metadata**:
 
 ```json
-// seo.json
+// src/seo.json
 {
   "/contact": {
     "title": "Contact - My App",
@@ -190,7 +190,7 @@ const appName = import.meta.env.VITE_APP_NAME;
 
 1. **Replace logo**: `public/images/logo.webp`
 2. **Update favicon**: `public/favicon.ico`
-3. **Edit site name**: `seo.json` → `_global.siteName`
+3. **Edit site name**: `src/seo.json` -> `_global.siteName`
 
 ### Change Colors
 

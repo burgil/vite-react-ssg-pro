@@ -283,7 +283,7 @@ terserConfig: {
 1. `scripts/prerender.ts` reads all routes from `src/Router.tsx`
 2. For each route:
    - Renders React component to HTML string
-   - Injects SEO metadata from `seo.json`
+   - Injects SEO metadata from `src/seo.json`
    - Applies Beasties to inline critical CSS
    - Generates `sitemap.xml` and `robots.txt`
 

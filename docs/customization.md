@@ -18,7 +18,7 @@ Make this template your own.
 
 ### Site Name & Description
 
-**1. Update `seo.json`**:
+**1. Update `src/seo.json`**:
 
 ```json
 {
@@ -228,7 +228,7 @@ export default function Footer() {
 
 Update in multiple places:
 
-**1. `seo.json`**:
+**1. `src/seo.json`**:
 ```json
 {
   "_global": {
@@ -289,7 +289,7 @@ const Pricing = lazy(() => import('./pages/pricing'));
 <Route path="pricing" element={<Pricing />} />
 ```
 
-**3. Add SEO** in `seo.json`:
+**3. Add SEO** in `src/seo.json`:
 
 ```json
 {
@@ -330,7 +330,7 @@ const About = lazy(() => import('./pages/about'));
 <Route path="about" element={<About />} />
 ```
 
-**3. Remove from `seo.json`**:
+**3. Remove from `src/seo.json`**:
 
 ```json
 {

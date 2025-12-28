@@ -86,7 +86,7 @@ const About = lazy(() => import('./pages/about'));
 **The Secret Sauce**: `scripts/prerender.ts`
 
 This script runs during build and:
-1. Reads your routes from `seo.json`
+1. Reads your routes from `src/seo.json`
 2. Renders each React page to HTML string
 3. Injects SEO metadata into `<head>`
 4. Adds Schema.org structured data
@@ -142,7 +142,7 @@ fs.writeFileSync(outputPath, finalHTML);
 
 ### Meta Tag System
 
-All SEO data lives in `seo.json`:
+All SEO data lives in `src/seo.json`:
 
 ```json
 {

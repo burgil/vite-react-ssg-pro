@@ -32,7 +32,7 @@ Every page is built as static HTML with all content visible in the source:
 
 ### 2. Meta Tags
 
-Configured in `seo.json`, injected at build time:
+Configured in `src/seo.json`, injected at build time:
 
 ```json
 {
@@ -89,7 +89,7 @@ Rich snippets in search results:
 
 ### Global Settings
 
-Edit `seo.json` → `_global`:
+Edit `src/seo.json` → `_global`:
 
 ```json
 {
@@ -337,7 +337,7 @@ Avoid:
 
 ### Pre-Launch
 
-- [ ] Set `domain` in `seo.json` to production URL
+- [ ] Set `domain` in `src/seo.json` to production URL
 - [ ] Update all page titles and descriptions
 - [ ] Generate OG images for all pages
 - [ ] Create custom `favicon.ico`
@@ -395,7 +395,7 @@ Paste your page URL and verify all schemas are valid.
 
 ### Breadcrumbs
 
-Add to `seo.json`:
+Add to `src/seo.json`:
 
 ```json
 {
@@ -436,7 +436,7 @@ For multi-language sites:
 <link rel="alternate" hreflang="es" href="https://example.com/es/">
 ```
 
-3. Update `seo.json` per language.
+3. Update `src/seo.json` per language.
 
 ## Common SEO Mistakes
 

@@ -54,7 +54,7 @@ def parse_args():
     parser.add_argument('--port', default=4173, type=int, help='Local server port (default: 4173)')
     parser.add_argument('--cleanup', action='store_true', help='Delete orphaned OG images not referenced in seo.json')
     parser.add_argument('--dry-run', action='store_true', help='When used with --cleanup, list files that would be deleted without deleting')
-    parser.add_argument('--seo', default='seo.json', help='Path to seo.json')
+    parser.add_argument('--seo', default='src/seo.json', help='Path to seo.json')
     parser.add_argument('--out', default='public', help='Output dir for images (default: public)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
     args = parser.parse_args()
@@ -95,12 +95,155 @@ async def generate_images(host: str, port: int, seo_path: str, out_dir: str, ove
     # Collect routes: keys in seo that start with '/'
     routes = [k for k in seo.keys() if k.startswith('/')]
     
-    # Start Playwright early and test server connectivity before prompting
+    # First pass: determine which routes need OG images generated (before launching browser)
+    routes_to_process = []
+    existing_count = 0
+    
+    for route in routes:
+        if route == '':
+            continue
+        config = seo.get(route, {})
+        og_image = config.get('ogImage')
+        if not og_image:
+            continue
+        
+        if og_image.startswith('/'):
+            dest_rel = og_image[1:]
+        else:
+            dest_rel = og_image
+        
+        dest_path = Path(out_dir) / dest_rel
+        fname = dest_path.name
+        
+        # Only target files prefixed with 'og-'
+        if not fname.lower().startswith('og-'):
+            continue
+        
+        if dest_path.exists():
+            existing_count += 1
+            if overwrite:
+                routes_to_process.append((route, og_image, dest_path))
+        else:
+            routes_to_process.append((route, og_image, dest_path))
+    
+    # Handle overwrite prompt if there are existing files and not already set to overwrite
+    if not overwrite and existing_count > 0:
+        # Prompt with a 10-second timeout that defaults to 'Y' (skip overwriting).
+        prompt_text = f"{Colors.YELLOW}[?] Found {existing_count} existing OG image(s). Skip overwriting them? (Y/n):{Colors.RESET} "
+        print(prompt_text, end='', flush=True)
+
+        def timed_prompt(prompt: str, timeout: float = 10.0, default: str = 'y') -> str:
+            # Check if cancel event was set before starting
+            if prompt_cancel_event.is_set():
+                raise KeyboardInterrupt
+            # Windows: use msvcrt to read characters without requiring Enter
+            if os.name == 'nt':
+                try:
+                    import msvcrt
+                except Exception:
+                    # Fallback to input() if msvcrt isn't available
+                    try:
+                        return input().strip().lower()
+                    except KeyboardInterrupt:
+                        raise
+                    except Exception:
+                        return default
+                buf = []
+                start = time.time()
+                while True:
+                    if prompt_cancel_event.is_set():
+                        raise KeyboardInterrupt
+                    if msvcrt.kbhit():
+                        ch = msvcrt.getwche()
+                        if ch == '\x03':
+                            raise KeyboardInterrupt
+                        if ch in ('\r', '\n'):
+                            print()
+                            return ''.join(buf).strip().lower()
+                        elif ch == '\x08':
+                            if buf:
+                                buf.pop()
+                                print('\b \b', end='', flush=True)
+                        else:
+                            buf.append(ch)
+                            if ch.lower() in ('y', 'n') and len(buf) == 1:
+                                print()
+                                return ch.lower()
+                    if time.time() - start >= timeout:
+                        print()
+                        if prompt_cancel_event.is_set():
+                            raise KeyboardInterrupt
+                        print(f"{Colors.CYAN}[INFO] No response after {int(timeout)} seconds, defaulting to skip overwriting{Colors.RESET}")
+                        return default
+                    time.sleep(0.1)
+            else:
+                try:
+                    import select, sys
+                    rlist, _, _ = select.select([sys.stdin], [], [], timeout)
+                    if rlist:
+                        line = sys.stdin.readline().strip().lower()
+                        return line
+                    else:
+                        print()
+                        if prompt_cancel_event.is_set():
+                            raise KeyboardInterrupt
+                        print(f"{Colors.CYAN}[INFO] No response after {int(timeout)} seconds, defaulting to skip overwriting{Colors.RESET}")
+                        return default
+                except Exception:
+                    try:
+                        return input().strip().lower()
+                    except KeyboardInterrupt:
+                        raise
+                    except Exception:
+                        return default
+
+        try:
+            response = await asyncio.get_event_loop().run_in_executor(None, timed_prompt, prompt_text, 10.0, 'y')
+        except asyncio.CancelledError:
+            prompt_cancel_event.set()
+            print(f"\n{Colors.CYAN}[INFO] Prompt cancelled by user (Ctrl+C). Exiting...{Colors.RESET}")
+            sys.exit(1)
+        except KeyboardInterrupt:
+            prompt_cancel_event.set()
+            print(f"\n{Colors.CYAN}[INFO] Operation cancelled by user (Ctrl+C). Exiting...{Colors.RESET}")
+            sys.exit(1)
+
+        if response == 'n' or response == 'no':
+            print(f"{Colors.CYAN}[INFO] Will overwrite existing images{Colors.RESET}")
+            # Add existing files to routes_to_process (they weren't added in the first pass)
+            for route in routes:
+                if route == '':
+                    continue
+                config = seo.get(route, {})
+                og_image = config.get('ogImage')
+                if not og_image:
+                    continue
+                if og_image.startswith('/'):
+                    dest_rel = og_image[1:]
+                else:
+                    dest_rel = og_image
+                dest_path = Path(out_dir) / dest_rel
+                fname = dest_path.name
+                if not fname.lower().startswith('og-'):
+                    continue
+                # Add existing files that weren't already in the list
+                if dest_path.exists() and (route, og_image, dest_path) not in routes_to_process:
+                    routes_to_process.append((route, og_image, dest_path))
+        else:
+            print(f"{Colors.CYAN}[INFO] Will skip overwriting existing images{Colors.RESET}")
+    
+    # If no routes need processing, exit early without launching browser
+    if not routes_to_process:
+        print(f"{Colors.GREEN}[OK] All OG images are up to date. Nothing to generate.{Colors.RESET}")
+        return
+    
+    # Only now launch the browser since we have work to do
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(viewport={'width': 1200, 'height': 630})
         page = await context.new_page()
-        # Test server connectivity before processing routes or prompting
+        
+        # Test server connectivity once before processing
         try:
             print(f"{Colors.BLUE}[TEST] Testing connection to {base_url}...{Colors.RESET}")
             response = await page.goto(base_url, wait_until='networkidle', timeout=10000)
@@ -120,158 +263,7 @@ async def generate_images(host: str, port: int, seo_path: str, out_dir: str, ove
             await browser.close()
             sys.exit(1)
 
-        # Check if any existing images will be encountered
-        if not overwrite:
-            existing_count = 0
-            for route in routes:
-                if route == '':
-                    continue
-                config = seo.get(route, {})
-                og_image = config.get('ogImage')
-                if not og_image:
-                    continue
-                if og_image.startswith('/'):
-                    dest_rel = og_image[1:]
-                else:
-                    dest_rel = og_image
-                dest_path = Path(out_dir) / dest_rel
-                # Only count existing files that are OG images (prefixed with 'og-')
-                if dest_path.exists() and dest_path.name.lower().startswith('og-'):
-                    existing_count += 1
-            
-            if existing_count > 0:
-                # Prompt with a 10-second timeout that defaults to 'Y' (skip overwriting).
-                prompt_text = f"{Colors.YELLOW}[?] Found {existing_count} existing OG image(s). Skip overwriting them? (Y/n):{Colors.RESET} "
-                print(prompt_text, end='', flush=True)
-
-                def timed_prompt(prompt: str, timeout: float = 10.0, default: str = 'y') -> str:
-                    # Check if cancel event was set before starting
-                    if prompt_cancel_event.is_set():
-                        raise KeyboardInterrupt
-                    # Windows: use msvcrt to read characters without requiring Enter
-                    if os.name == 'nt':
-                        try:
-                            import msvcrt
-                        except Exception:
-                            # Fallback to input() if msvcrt isn't available
-                            try:
-                                return input().strip().lower()
-                            except KeyboardInterrupt:
-                                # Propagate so the prompt handling can cancel the whole script
-                                raise
-                            except Exception:
-                                return default
-                        buf = []
-                        start = time.time()
-                        while True:
-                            if prompt_cancel_event.is_set():
-                                raise KeyboardInterrupt
-                            if msvcrt.kbhit():
-                                ch = msvcrt.getwche()
-                                # Ctrl+C via msvcrt may appear as ASCII ETX '\x03'
-                                if ch == '\x03':
-                                    raise KeyboardInterrupt
-                                if ch in ('\r', '\n'):
-                                    print()
-                                    return ''.join(buf).strip().lower()
-                                elif ch == '\x08':  # backspace
-                                    if buf:
-                                        buf.pop()
-                                        # Erase character visually
-                                        print('\b \b', end='', flush=True)
-                                else:
-                                    buf.append(ch)
-                                    # Accept single 'y' or 'n' keypress without Enter
-                                    if ch.lower() in ('y', 'n') and len(buf) == 1:
-                                        print()
-                                        return ch.lower()
-                            if time.time() - start >= timeout:
-                                print()
-                                if prompt_cancel_event.is_set():
-                                    raise KeyboardInterrupt
-                                print(f"{Colors.CYAN}[INFO] No response after {int(timeout)} seconds, defaulting to skip overwriting{Colors.RESET}")
-                                return default
-                            time.sleep(0.1)
-                    else:
-                        # POSIX: select on stdin; user still must press Enter but we avoid a stuck thread
-                        try:
-                            import select, sys
-                            rlist, _, _ = select.select([sys.stdin], [], [], timeout)
-                            if rlist:
-                                line = sys.stdin.readline().strip().lower()
-                                return line
-                            else:
-                                print()
-                                if prompt_cancel_event.is_set():
-                                    raise KeyboardInterrupt
-                                print(f"{Colors.CYAN}[INFO] No response after {int(timeout)} seconds, defaulting to skip overwriting{Colors.RESET}")
-                                return default
-                        except Exception:
-                            # Fallback
-                            try:
-                                return input().strip().lower()
-                            except KeyboardInterrupt:
-                                # Propagate to caller so we can cancel the whole run
-                                raise
-                            except Exception:
-                                return default
-
-                # Run the prompt in an executor so we don't block the event loop
-                try:
-                    response = await asyncio.get_event_loop().run_in_executor(None, timed_prompt, prompt_text, 10.0, 'y')
-                except asyncio.CancelledError:
-                    prompt_cancel_event.set()
-                    print(f"\n{Colors.CYAN}[INFO] Prompt cancelled by user (Ctrl+C). Exiting...{Colors.RESET}")
-                    try:
-                        await browser.close()
-                    except Exception:
-                        pass
-                    sys.exit(1)
-                except KeyboardInterrupt:
-                    prompt_cancel_event.set()
-                    print(f"\n{Colors.CYAN}[INFO] Operation cancelled by user (Ctrl+C). Exiting...{Colors.RESET}")
-                    try:
-                        await browser.close()
-                    except Exception:
-                        pass
-                    sys.exit(1)
-
-                # Default: skip existing images unless user answers 'n' or 'no'
-                if response == 'n' or response == 'no':
-                    overwrite = True
-                    print(f"{Colors.CYAN}[INFO] Will overwrite existing images{Colors.RESET}")
-                else:
-                    print(f"{Colors.CYAN}[INFO] Will skip overwriting existing images{Colors.RESET}")
-
-        
-
-        for route in routes:
-            # Skip only if route is '/'
-            if route == '':
-                continue
-            config = seo.get(route, {})
-            og_image = config.get('ogImage')
-            if not og_image:
-                print(f"{Colors.BLUE}[SKIP] Skipping {route}: no ogImage configured{Colors.RESET}")
-                continue
-
-            # Determine local filepath for OG image
-            # ogImage may be '/images/og/og-home.webp'
-            if og_image.startswith('/'):
-                dest_rel = og_image[1:]
-            else:
-                dest_rel = og_image
-
-            dest_path = Path(out_dir) / dest_rel
-            # Only target files prefixed with 'og-'. Skip other image types (e.g., article hero images).
-            fname = dest_path.name
-            if not fname.lower().startswith('og-'):
-                print(f"{Colors.BLUE}[SKIP] Skipping {route}: ogImage '{og_image}' is not prefixed with 'og-' (not an OG image){Colors.RESET}")
-                continue
-            if dest_path.exists() and not overwrite:
-                # print(f"OG image already exists for {route}, skipping: {dest_path}")
-                continue
-
+        for route, og_image, dest_path in routes_to_process:
             # Ensure directory exists
             ensure_dir_for_file(dest_path)
 
