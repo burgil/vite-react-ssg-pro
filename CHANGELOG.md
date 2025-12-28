@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0] - 2025-12-28
+
+### Changed
+- Updated dependencies for ESLint and added unrs-resolver
+- Added `eslint-import-resolver-typescript` and `eslint-plugin-import` to package.json
+- Updated pnpm-lock.yaml with new dependencies and their resolutions
+- Included `unrs-resolver` in pnpm-workspace.yaml for workspace management
+
 ## [1.2.0] - 2025-12-28
 
 ### Added
