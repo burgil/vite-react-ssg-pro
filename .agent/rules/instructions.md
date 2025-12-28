@@ -2,10 +2,10 @@
 trigger: always_on
 ---
 
-# Vite React SSR Pro - AI Agent Instructions
+# Vite React SSG Pro - AI Agent Instructions
 
 ## Project Overview
-This is a highly optimized Vite + React starter template with SSR/SSG capabilities, designed for production use. It achieves **100 mobile / 100 desktop** PageSpeed Insights scores out of the box.
+This is a highly optimized Vite + React starter template with SSG capabilities, designed for production use. It achieves **100 mobile / 100 desktop** PageSpeed Insights scores out of the box.
 
 ---
 
@@ -26,12 +26,12 @@ src/
 ├── pages/           # Route pages (home.tsx, about.tsx)
 ├── components/      # Reusable UI components
 ├── Router.tsx       # Route definitions with lazy loading
-├── Layout.tsx       # Suspense wrapper + SEO (prerenderer handles SSR semantics)
+├── Layout.tsx       # Suspense wrapper + SEO (prerenderer handles SSR/SSG semantics)
 ├── main.tsx         # App entry point
 └── index.css        # Global styles
 
 scripts/
-├── prerender.ts                 # SSR prerendering with critical CSS
+├── prerender.ts                 # SSR/SSG prerendering with critical CSS (SSG)
 ├── generate_og_screenshots.py   # OG image generation
 ├── README_generate_og.md        # OG script documentation
 └── requirements.txt             # Python dependencies
@@ -63,7 +63,7 @@ pnpm preview          # Preview production build
 ```bash
 pnpm build            # Full build: lint → core:build → og-screenshots
 pnpm core:build       # Build + prerender (no OG screenshots)
-pnpm prerender        # Regenerate SSR HTML with critical CSS
+pnpm prerender        # Regenerate SSR/SSG HTML with critical CSS
 pnpm og-screenshots   # Generate OG images from live pages
 pnpm analyze          # Build with bundle analyzer (opens dist/stats.html)
 ```
@@ -102,7 +102,7 @@ pnpm lint             # ESLint + TypeScript + Knip
 - Dual compression: gzip + brotli
 - All assets have `.gz` and `.br` variants
 
-### 6. **SSR (Server-Side Rendering)**
+### 6. **SSR/SSG (Server-Side Rendering / Static Site Generation)**
 - All routes prerendered to static HTML
 - SEO metadata from `seo.json`
 - Automatic `sitemap.xml` and `robots.txt` generation
@@ -226,7 +226,7 @@ const Footer = lazy(() => import('./Footer'));
 
 ### Pattern 2: Suspense (Layout.tsx pattern)
 ```tsx
-// The prerenderer handles Suspense during SSR; use Suspense normally
+// The prerenderer handles Suspense during SSR/SSG; use Suspense normally
 return (
   <Suspense fallback={<LoadingScreen />}>
     {content}
@@ -351,7 +351,7 @@ python scripts/generate_og_screenshots.py --port 4173 --seo seo.json --cleanup -
 - Don't lazy-load above-the-fold content
 - Don't use empty Suspense fallbacks (causes layout shift)
 - Don't skip SEO metadata in `seo.json`
-- Don't use `startTransition` in `main.tsx` (breaks SSR hydration)
+- Don't use `startTransition` in `main.tsx` (breaks SSR/SSG hydration)
 - Don't add CSS containment to Layout's main tag (blocks rendering)
 
 ---
@@ -422,7 +422,7 @@ Before deployment, verify:
 This template is scaffolded via:
 
 ```bash
-npx github:burgil/vite-react-ssr-pro my-project
+npx github:burgil/vite-react-ssg-pro my-project
 # or
 npm create burgil-app my-project
 ```
@@ -433,7 +433,7 @@ npm create burgil-app my-project
 
 - ErrorBoundary wraps the entire app for error handling
 - `@` alias resolves to `src/` (configured in `vite.config.ts`)
-- SSR detection flag: `window.__SSR__` (set by prerender script) - note: you don't need to use this flag to guard Suspense boundaries; the prerenderer handles SSR semantics
+- SSR detection flag: `window.__SSR__` (set by prerender script) - note: you don't need to use this flag to guard Suspense boundaries; the prerenderer handles SSR/SSG semantics
 - Beasties runs twice: once during Vite build, once during prerender
 - All optimizations are configurable via `vite.config.ts`
 

@@ -23,7 +23,7 @@ Every page is built as static HTML with all content visible in the source:
 ```html
 <!-- What Google sees: -->
 <main>
-  <h1>Vite React SSR Pro</h1>
+  <h1>Vite React SSG Pro</h1>
   <p>A minimal Vite + React starter template...</p>
 </main>
 ```
@@ -37,7 +37,7 @@ Configured in `seo.json`, injected at build time:
 ```json
 {
   "/": {
-    "title": "Vite React SSR Pro - Vite + React",
+    "title": "Vite React SSG Pro - Vite + React",
     "description": "A minimal Vite + React landing page template",
     "keywords": "vite,react,starter,template"
   }
@@ -46,7 +46,7 @@ Configured in `seo.json`, injected at build time:
 
 **Generated HTML**:
 ```html
-<title>Vite React SSR Pro - Vite + React</title>
+<title>Vite React SSG Pro - Vite + React</title>
 <meta name="description" content="A minimal Vite + React landing page template">
 <meta name="keywords" content="vite,react,starter,template">
 <link rel="canonical" href="https://example.com/">
@@ -57,7 +57,7 @@ Configured in `seo.json`, injected at build time:
 Perfect social media previews:
 
 ```html
-<meta property="og:title" content="Vite React SSR Pro">
+<meta property="og:title" content="Vite React SSG Pro">
 <meta property="og:description" content="...">
 <meta property="og:image" content="/images/og/og-home.webp">
 <meta property="og:type" content="website">
@@ -73,7 +73,7 @@ Rich snippets in search results:
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Vite React SSR Pro",
+  "name": "Vite React SSG Pro",
   "url": "https://example.com",
   "logo": "https://example.com/images/logo.webp",
   "sameAs": [

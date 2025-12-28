@@ -1,6 +1,6 @@
 ## UI & UX Guidelines — Premium Minimal Design
 
-This document describes the UI/UX design intent for the Vite React SSR Pro, and explains how to use and maintain the `.agent`, `.github` directories and README links. It also includes a practical checklist and guidelines to achieve a premium, minimal, and accessible UI.
+This document describes the UI/UX design intent for the Vite React SSG Pro, and explains how to use and maintain the `.agent`, `.github` directories and README links. It also includes a practical checklist and guidelines to achieve a premium, minimal, and accessible UI.
 
 ### Purpose
 - Provide clear, actionable guidelines for creating a premium, minimal UI that follows modern design systems.

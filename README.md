@@ -1,10 +1,10 @@
-# ⚡ Vite React SSR Pro Template
+# ⚡ Vite React SSG Pro Template
 
 ![page-speed](assets/page-speed.png)
 
 > **Skip days of setup. Ship production-ready React apps with perfect SEO and zero backend costs.**
 
-A battle-tested Vite + React template that generates **fully static sites** with server-side rendering (SSR) benefits - no servers, no complexity, just pure performance that Google loves.
+A battle-tested Vite + React template that generates **fully static sites** with server-side rendering (SSR) benefits - but **no servers** (SSG), no complexity, just pure performance that Google loves.
 
 ![Web Preview](assets/web-preview.png)
 

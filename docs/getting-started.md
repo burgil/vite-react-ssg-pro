@@ -27,7 +27,7 @@ pnpm dev
 
 ```bash
 # Copy the template folder to your desired location
-cp -r vite-react-ssr-pro my-new-project
+cp -r vite-react-ssg-pro my-new-project
 cd my-new-project
 
 # Install dependencies

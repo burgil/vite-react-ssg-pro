@@ -171,7 +171,7 @@ pnpm build
    b. Beasties (inline critical CSS)
    c. Compression (gzip + brotli)
   ↓
-   d. pnpm prerender (SSR all routes with SEO metadata)
+   d. pnpm prerender (SSR/SSG all routes with SEO metadata)
 ```
 
 ---
@@ -274,7 +274,7 @@ terserConfig: {
 
 ---
 
-## 🔍 SSR (Server-Side Rendering) with Prerendering
+## 🔍 SSR/SSG (Server-Side Rendering / Static Site Generation) with Prerendering
 
 ### How It Works
 
@@ -285,9 +285,9 @@ terserConfig: {
    - Applies Beasties to inline critical CSS
    - Generates `sitemap.xml` and `robots.txt`
 
-### SSR and Suspense (Prerenderer handling)
+### SSR/SSG and Suspense (Prerenderer handling)
 
-Suspense boundaries are automatically handled during SSR by the prerenderer. You no longer need to detect SSR inside components or conditionally skip Suspense boundaries - the prerenderer will ensure server rendering and client hydration behave correctly.
+Suspense boundaries are automatically handled during SSR/SSG by the prerenderer. You no longer need to detect SSR/SSG inside components or conditionally skip Suspense boundaries - the prerenderer will ensure server rendering and client hydration behave correctly.
 
 ---
 

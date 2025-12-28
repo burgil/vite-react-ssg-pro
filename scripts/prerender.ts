@@ -408,9 +408,9 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
                     try {
                         pipeable.abort();
                     } catch (err) {
-                        console.warn(`${colors.yellow}⚠️ Failed to abort SSR render:${colors.reset}`, err);
+                        console.warn(`${colors.yellow}⚠️ Failed to abort SSR/SSG render:${colors.reset}`, err);
                     }
-                    reject(new Error('SSR render timed out'));
+                    reject(new Error('SSR/SSG render timed out'));
                 }
             }, 30_000);
             // Clear timeout on resolve/reject
@@ -524,7 +524,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
 
 async function prerender() {
     try {
-        console.log(`${colors.bright}${colors.cyan}🚀 Starting SSR prerendering with SEO optimization...${colors.reset}\n`);
+        console.log(`${colors.bright}${colors.cyan}🚀 Starting SSR/SSG prerendering with SEO optimization...${colors.reset}\n`);
 
         const window = new Window();
 

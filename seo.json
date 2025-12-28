@@ -1,6 +1,6 @@
 {
   "_global": {
-    "siteName": "Vite React SSR Pro",
+    "siteName": "Vite React SSG Pro",
     "domain": "https://example.com",
     "locale": "en_US",
     "defaultRobots": "index, follow",
@@ -18,13 +18,13 @@
       "type": "Customer Support"
     },
     "organization": {
-      "name": "Vite React SSR Pro",
-      "description": "Production-ready Vite + React 19 template with SSR, 100/100 PageSpeed scores.",
+      "name": "Vite React SSG Pro",
+      "description": "Production-ready Vite + React 19 template with SSG, 100/100 PageSpeed scores.",
       "foundingDate": "2025",
       "url": "https://example.com"
     },
     "software": {
-      "name": "Vite React SSR Pro",
+      "name": "Vite React SSG Pro",
       "price": 0,
       "category": "WebApplication",
       "operatingSystem": "Web, iOS, Android",
@@ -32,13 +32,13 @@
     }
   },
   "/": {
-    "title": "Vite React SSR Pro - React 19 Template",
-    "description": "Production-ready Vite + React 19 template with SSR/SSG, achieving 100/100 PageSpeed scores out of the box.",
-    "keywords": "vite,react,ssr,template,react19,typescript,tailwind",
+    "title": "Vite React SSG Pro - React 19 Template",
+    "description": "Production-ready Vite + React 19 template with SSG, achieving 100/100 PageSpeed scores out of the box.",
+    "keywords": "vite,react,ssg,template,react19,typescript,tailwind",
     "canonical": "https://example.com/",
     "ogType": "website",
     "ogImage": "/images/og/og-home.webp",
-    "ogImageAlt": "Vite React SSR Pro - React 19 Template",
+    "ogImageAlt": "Vite React SSG Pro - React 19 Template",
     "ogImageWidth": 1200,
     "ogImageHeight": 630,
     "twitterCard": "summary_large_image",
@@ -53,13 +53,13 @@
     }
   },
   "/about": {
-    "title": "About - Vite React SSR Pro",
+    "title": "About - Vite React SSG Pro",
     "description": "About this production-ready React 19 template and how to use it.",
-    "keywords": "vite,react,template,ssr,about",
+    "keywords": "vite,react,template,ssg,about",
     "canonical": "https://example.com/about",
     "ogType": "article",
     "ogImage": "/images/og/og-about.webp",
-    "ogImageAlt": "About - Vite React SSR Pro",
+    "ogImageAlt": "About - Vite React SSG Pro",
     "ogImageWidth": 1200,
     "ogImageHeight": 630,
     "twitterCard": "summary_large_image",
@@ -75,13 +75,13 @@
     }
   },
   "/suspense-example": {
-    "title": "Suspense Example - Vite React SSR Pro",
+    "title": "Suspense Example - Vite React SSG Pro",
     "description": "An example page demonstrating React Suspense with loading fallback states and async data.",
     "keywords": "react,suspense,async,example,template",
     "canonical": "https://example.com/suspense-example",
     "ogType": "article",
     "ogImage": "/images/og/og-suspense.webp",
-    "ogImageAlt": "Suspense Example - Vite React SSR Pro",
+    "ogImageAlt": "Suspense Example - Vite React SSG Pro",
     "ogImageWidth": 1200,
     "ogImageHeight": 630,
     "twitterCard": "summary_large_image",

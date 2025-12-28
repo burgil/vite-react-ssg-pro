@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Initial Release
 
-Production-ready Vite + React 19 template with SSR/SSG capabilities achieving 100/100 PageSpeed scores.
+Production-ready Vite + React 19 template with SSG capabilities achieving 100/100 PageSpeed scores.
 
 #### Core Features
 - **Vite 7** + **React 19** + **TypeScript 5.9** foundation

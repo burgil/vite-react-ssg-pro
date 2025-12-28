@@ -103,7 +103,7 @@ const Layout: FC = () => {
   );
 
   // Suspense boundaries work both on the server and client; the prerenderer
-  // will handle SSR semantics automatically. Use Suspense normally - no
+  // will handle SSR/SSG semantics automatically. Use Suspense normally - no
   // manual `isSSR` checks are required.
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -411,11 +411,11 @@ function App({ isAdmin }: { isAdmin: boolean }) {
 **Key Takeaways:**
 - Use `lazy()` + `<Suspense>` for code splitting
 - Always provide sized fallbacks to prevent layout shift
-- Suspense boundaries are handled automatically during SSR by the prerenderer - you don't need to guard them with `isSSR` checks
+- Suspense boundaries are handled automatically during SSR/SSG by the prerenderer - you don't need to guard them with `isSSR` checks
 - Lazy-load below-the-fold and heavy components
 - Measure impact with bundle analyzer (`ANALYZE=true pnpm core:build`)
 
 - **Template-specific patterns:**
-- See `src/Layout.tsx` for a Suspense pattern that works in both SSR and client environments (the prerenderer handles SSR semantics)
+- See `src/Layout.tsx` for a Suspense pattern that works in both SSR/SSG and client environments (the prerenderer handles SSR/SSG semantics)
 - See `vite.config.ts` for manual chunk configuration
 - See `docs/optimize.md` for bundle optimization strategies

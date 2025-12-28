@@ -11,7 +11,7 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-[#020204] font-sans text-white">
-      <PageHeader title="About This Template" description="A production-ready Vite + React 19 template with SSR, achieving 100/100 PageSpeed scores." />
+      <PageHeader title="About This Template" description="A production-ready Vite + React 19 template with SSG, achieving 100/100 PageSpeed scores." />
 
       <section className="py-16 container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
