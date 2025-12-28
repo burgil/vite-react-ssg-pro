@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2025-12-28
+
+### Changed
+- Clarified that this template is a Static Site Generator (SSG) and not a runtime SSR solution. Updated documentation and instructions to emphasize SSG/static output and correct any misleading SSR/SSG references.
+- Added instructions to the README for updating dependencies using `pnpm upgrade --latest`.
+
 All notable changes to this project will be documented in this file.
 
 ## [1.0.1] - 2025-12-27

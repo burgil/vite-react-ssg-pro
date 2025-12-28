@@ -1,5 +1,7 @@
 # React Suspense Guide
 
+> **Note:** This template is a static site generator (SSG) and does not provide runtime SSR. Suspense boundaries are handled at build time during prerendering.
+
 ## Overview
 
 React Suspense allows you to declaratively handle loading states while components are being lazy-loaded or while data is being fetched. This guide shows you how to use Suspense effectively in this template.

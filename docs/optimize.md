@@ -1,5 +1,7 @@
 # Performance Optimization Guide
 
+> **Note:** This template is a static site generator (SSG) and does not provide runtime SSR. All pages are prerendered to static HTML at build time.
+
 ## Overview
 This template includes advanced performance optimizations to achieve **100 mobile / 100 desktop** PageSpeed Insights scores out of the box.
 

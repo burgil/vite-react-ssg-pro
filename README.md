@@ -1,5 +1,7 @@
 # ⚡ Vite React SSG Pro Template
 
+> **Note:** This template is a static site generator (SSG) that prerenders all routes to static HTML at build time. It does not provide runtime SSR (server-side rendering). All output is fully static and deployable to any static host.
+
 ![page-speed](assets/page-speed.png)
 
 > **Skip days of setup. Ship production-ready React apps with perfect SEO and zero backend costs.**
@@ -213,6 +215,18 @@ Perfect for:
 2. **Customize** colors, fonts, and content in `tailwind.config.js` and `src/`
 3. **Deploy** to Cloudflare Pages or Vercel (takes 2 minutes)
 4. **Ship** your epic project to the world 🚀
+
+---
+
+## 🔄 Updating Dependencies
+
+To update all dependencies to their latest versions, run:
+
+```bash
+pnpm upgrade --latest
+```
+
+This will update your package.json and lockfile to the newest compatible versions.
 
 ---
 

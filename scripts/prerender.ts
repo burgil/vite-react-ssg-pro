@@ -1,3 +1,6 @@
+// This script prerenders all routes to static HTML for SSG (static site generation). It does NOT provide runtime SSR.
+// All output is static and deployable to any static host.
+
 import { createElement } from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { PassThrough } from 'stream';

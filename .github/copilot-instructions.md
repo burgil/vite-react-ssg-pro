@@ -1,7 +1,7 @@
 ````instructions
 # Vite React SSG Pro - GitHub Copilot Instructions
 
-**Project Overview**: Highly optimized Vite + React starter template with SSG capabilities, achieving **100 mobile / 100 desktop** PageSpeed Insights scores.
+**Project Overview**: Highly optimized Vite + React starter template with SSG (Static Site Generation) capabilities, achieving **100 mobile / 100 desktop** PageSpeed Insights scores. This template is a static site generator (SSG) and does not provide runtime SSR (server-side rendering).
 
 ## Tech Stack
 - **Framework**: Vite 7 + React 19 + TypeScript 5.9
@@ -10,13 +10,13 @@
 - **Animations**: Framer Motion
 - **Icons**: Lucide React + React Icons
 - **Build**: Terser, Lightning CSS, Beasties (critical CSS)
-- **SSR**: Happy-DOM for server-side rendering
+- **SSG**: Prerendering with Happy-DOM for static HTML output (no runtime SSR)
 
 ## Structure
 - **Pages**: `src/pages/` - Route pages (home.tsx, about.tsx)
 - **Components**: `src/components/` - Reusable UI components
 - **Router**: `src/Router.tsx` - Route definitions with lazy loading
-- **Layout**: `src/Layout.tsx` - Suspense wrapper + SEO (prerenderer handles SSR/SSG semantics)
+- **Layout**: `src/Layout.tsx` - Suspense wrapper + SEO (prerenderer handles SSG/static semantics)
 - **SEO**: `seo.json` - Metadata for all routes
 - **Scripts**: `scripts/` - Prerender and OG image generation
 - **Docs**: `docs/` - Comprehensive guides (optimize.md, suspense-guide.md, etc.)
@@ -52,8 +52,8 @@ pnpm preview          # Preview production build
 - `font-display: optional` for zero CLS
 - Async loading via `media="print"` + `onload`
 
-### 5. SSR/SSG (Server-Side Rendering / Static Site Generation)
-- All routes prerendered to static HTML
+### 5. SSG (Static Site Generation)
+- All routes prerendered to static HTML (no runtime SSR)
 - SEO metadata from `seo.json`
 - Auto-generates `sitemap.xml` and `robots.txt`
 
@@ -106,7 +106,7 @@ const Footer = lazy(() => import('./Footer'));
 
 ### Suspense (from Layout.tsx)
 ```tsx
-// Suspend boundaries are handled automatically during SSR/SSG; use Suspense
+// Suspend boundaries are handled automatically during SSG prerendering; use Suspense
 // without manual isSSR checks.
 return <Suspense fallback={<LoadingScreen />}>{content}</Suspense>;
 ```
