@@ -24,7 +24,7 @@ export default function Footer() {
                 href="https://github.com/burgil"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
+                className="w-10 h-10 rounded-xl bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
               >
                 <FaGithub className="w-5 h-5" />
               </motion.a>
@@ -34,7 +34,7 @@ export default function Footer() {
                 href="https://youtube.com/@BurgilBuilds"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
+                className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-700 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
               >
                 <FaYoutube className="w-5 h-5" />
               </motion.a>

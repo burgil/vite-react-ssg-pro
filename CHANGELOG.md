@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0] - 2025-12-28
+
+### Added
+- SEO configuration file (`src/seo.json`) with global and page-specific metadata for Vite React SSG Pro, including Open Graph, Twitter Card, and Schema.org support.
+
+### Changed
+- Moved `seo.json` to `src/seo.json` for better organization and import support.
+- Updated all code, scripts, and documentation to reference `src/seo.json` instead of the project root.
+- Updated OG image and sitemap generation scripts to use the new path.
+
+### Fixed
+- Ensured all SEO metadata is injected at build time for every route, improving SSG output and SEO consistency.
+- Corrected outdated tailwind class names for linear gradient in footer component
+
 ## [1.1.0] - 2025-12-28
 
 ### Changed

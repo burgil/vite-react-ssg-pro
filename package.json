@@ -1,7 +1,7 @@
 {
   "name": "vite-react-ssg-pro",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,7 @@
     "lint": "eslint . && tsc -b && knip --production --dependencies --files --exports --include-entry-exports",
     "prerender": "tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
     "compress": "tsx --tsconfig tsconfig.app.json scripts/compress.ts",
-    "og-screenshots": "python scripts/generate_og_screenshots.py --port 4173 --seo seo.json --cleanup",
+    "og-screenshots": "python scripts/generate_og_screenshots.py --port 4173 --seo src/seo.json --cleanup",
     "analyze": "cross-env ANALYZE=true pnpm core:build"
   },
   "devDependencies": {
