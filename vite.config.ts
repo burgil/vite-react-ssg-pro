@@ -22,8 +22,6 @@ const PROJECT_CONFIG = {
   warmupFiles: [
     './src/main.tsx',
     './src/Router.tsx',
-    './src/pages/home.tsx',
-    './src/components/Hero.tsx',
   ],
 
   // Manual chunk splitting for vendor libraries
@@ -132,9 +130,9 @@ export default defineConfig(() => {
 
   const config: UserConfig = {
     build: {
-      target: 'es2020',
+      target: 'esnext',
       cssMinify: 'lightningcss',
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1280,
       modulePreload: {
         polyfill: false, // Beasties handles preloading
       },
@@ -182,8 +180,8 @@ export default defineConfig(() => {
     },
     plugins: sharedPlugins,
     esbuild: {
-      drop: isProduction ? ['console', 'debugger'] : [],
-      target: 'es2020',
+      drop: isProduction ? ['debugger'] : [],
+      target: 'esnext',
     },
     server: {
       warmup: {

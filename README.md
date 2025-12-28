@@ -1,5 +1,7 @@
 # ⚡ Vite React SSG Pro Template
 
+> **Note:** Some files (such as config, scripts, or generated files) may be hidden in your editor due to workspace settings in `.vscode/settings.json`. If you don't see a file, check your folder and VS Code settings.
+
 > **Note:** This template is a static site generator (SSG) that prerenders all routes to static HTML at build time. It does not provide runtime SSR (server-side rendering). All output is fully static and deployable to any static host.
 
 ![page-speed](assets/page-speed.png)
@@ -65,6 +67,8 @@ Most React apps fail at SEO because they're client-side rendered. Traditional SS
 ✅ **Google Loves It** - Perfect Lighthouse scores out of the box  
 
 ### What Makes This Different
+
+![page-speed](assets/ssg-vs-ssr-vs-csr.png)
 
 | Feature | This Template | Typical React App | Next.js |
 |---------|--------------|-------------------|---------|

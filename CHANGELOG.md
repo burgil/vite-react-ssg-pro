@@ -10,6 +10,7 @@
 - Updated all code, scripts, and documentation to reference `src/seo.json` instead of the project root.
 - Updated OG image and sitemap generation scripts to use the new path.
 - Updated OG image generator to avoid requiring preview if not needed.
+- Updated `.vscode/settings.json` to show important files (such as `seo.json`, scripts, and configuration files) that were previously hidden, improving quality of life for development and editing.
 
 ### Fixed
 - Ensured all SEO metadata is injected at build time for every route, improving SSG output and SEO consistency.
