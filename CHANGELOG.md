@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.5.0] - 2026-01-05
+
+### Accessibility
+- Added `aria-label` to buttons and links in `Navbar` and `Footer` components for better screen reader support.
+- Improved color contrast in `Hero` and `Features` components (updated text colors to lighter shades for dark mode).
+- Fixed heading hierarchy in `Hero` component (changed feature cards from `h3` to `h2`).
+
+### Fixed
+- Resolved `ENOENT` error during `vite build` by disabling `vite-plugin-beasties` in the main build step (it is handled correctly in the prerender step).
+- Fixed CSS pruning issue by setting `pruneSource: false` in `vite.config.ts` and `prerender.ts` to prevent missing styles in shared CSS files.
+
+### Performance
+- Reduced bundle size by implementing `LazyMotion` with `domAnimation` from `framer-motion` (~38% reduction in motion chunk size).
+- Removed unused fonts (`JetBrains Mono`, `Outfit`) from `index.html` and `index.css` to improve load performance.
+- Optimized chunk splitting in `vite.config.ts` by separating `react-router` into its own vendor chunk, reducing the main vendor bundle size.
+- Removed redundant `vite-plugin-compression` dependency (compression is handled by `scripts/compress.ts`).
+
+### Changed
+- Updated `upload` script in `package.json` to use `wrangler` directly instead of `npx`, resolving npm environment configuration warnings.
+- Added `depcheck` to `devDependencies` and the `lint` script to detect unused dependencies.
+
 ## [1.4.0] - 2025-12-29
 
 ### Changed

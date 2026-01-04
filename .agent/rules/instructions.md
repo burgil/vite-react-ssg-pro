@@ -333,7 +333,7 @@ python scripts/generate_og_screenshots.py --port 4173 --seo seo.json --cleanup -
 
 ### Social Links (Default)
 - GitHub: https://github.com/burgil
-- YouTube: https://youtube.com/@BurgilBuilds
+- YouTube: https://youtube.com/@GenZv1Dev
 
 ---
 

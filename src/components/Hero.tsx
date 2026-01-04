@@ -1,5 +1,5 @@
 ﻿import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Zap, Star } from 'lucide-react';
 
 export default function Hero() {
@@ -43,14 +43,14 @@ export default function Hero() {
           >
             <span className="gradient-text">Build Amazing</span>
             <br />
-            <span className="text-gray-800">Web Apps Fast</span>
+            <span className="text-gray-100">Web Apps Fast</span>
           </motion.h1>
           
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed"
+            className="text-xl text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed"
           >
             A modern starter template with everything you need: beautiful animations, icons, routing, and more. Start building in seconds.
           </motion.p>
@@ -101,7 +101,7 @@ export default function Hero() {
                 className="glass-panel p-6 rounded-2xl text-center"
               >
                 <feature.icon className="w-8 h-8 mx-auto mb-3 text-purple-600" />
-                <h3 className="font-bold text-gray-800 mb-2">{feature.title}</h3>
+                <h2 className="font-bold text-gray-800 mb-2">{feature.title}</h2>
                 <p className="text-sm text-gray-600">{feature.desc}</p>
               </motion.div>
             ))}

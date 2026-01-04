@@ -457,7 +457,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
             path: distPath,
             publicPath: '/',
             preload: 'swap',
-            pruneSource: true, // Remove inlined CSS from external stylesheets
+            pruneSource: false, // Don't prune source to avoid breaking other pages sharing the same CSS
             inlineFonts: false, // Don't inline fonts - let the HTML template handle font loading
             preloadFonts: false, // Don't preload fonts - let the HTML template handle it
             compress: true,

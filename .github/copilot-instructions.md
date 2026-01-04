@@ -149,7 +149,7 @@ python scripts/generate_og_screenshots.py --port 4173 --seo seo.json --cleanup
 - **Keep it generic**: No product-specific content
 - **Use examples**: Show lucide-react, react-icons, framer-motion
 - **Stay minimal**: Simple, clean code that's easy to understand
-- **Social links**: GitHub (https://github.com/burgil) and YouTube (https://youtube.com/@BurgilBuilds)
+- **Social links**: GitHub (https://github.com/burgil) and YouTube (https://youtube.com/@GenZv1Dev)
 
 ## Best Practices
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { FaGithub, FaYoutube } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
@@ -55,6 +55,7 @@ export default function Navbar() {
                 href="https://github.com/burgil"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub"
               >
                 <FaGithub className="w-5 h-5" />
               </motion.a>
@@ -62,9 +63,10 @@ export default function Navbar() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="text-gray-700 hover:text-purple-600 transition-colors"
-                href="https://youtube.com/@BurgilBuilds"
+                href="https://youtube.com/@GenZv1Dev"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="YouTube"
               >
                 <FaYoutube className="w-5 h-5" />
               </motion.a>
@@ -85,6 +87,7 @@ export default function Navbar() {
             <button
               className="md:hidden text-gray-700 p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -113,7 +116,7 @@ export default function Navbar() {
               ))}
               <div className="flex gap-6 items-center pt-4 border-t border-gray-200">
                 <a href="https://github.com/burgil" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-purple-600">GitHub</a>
-                <a href="https://youtube.com/@BurgilBuilds" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-purple-600">YouTube</a>
+                <a href="https://youtube.com/@GenZv1Dev" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-purple-600">YouTube</a>
               </div>
             </div>
           </div>

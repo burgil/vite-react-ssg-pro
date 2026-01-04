@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Zap, Code, Palette, Rocket } from 'lucide-react';
 
 const features = [
@@ -46,7 +46,7 @@ export default function Features() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-xl text-gray-600"
+            className="text-xl text-gray-300"
           >
             Everything you need to build amazing web applications
           </motion.p>

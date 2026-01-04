@@ -1,10 +1,8 @@
 import { defineConfig, type PluginOption, type UserConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import checker from "vite-plugin-checker";
-import viteCompression from "vite-plugin-compression";
 import Inspect from "vite-plugin-inspect";
 import { qrcode } from "vite-plugin-qrcode";
-import { beasties } from "vite-plugin-beasties";
 import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
 import tailwindcss from '@tailwindcss/vite';
@@ -28,7 +26,8 @@ const PROJECT_CONFIG = {
   // Adjust based on your project's dependencies
   vendorChunks: {
     // Vendor chunks
-    'react-vendor': ['react', 'react-dom', 'react-router'],
+    'react-router': ['react-router'],
+    'react-core': ['react', 'react-dom'],
     'framer-motion': ['framer-motion'],
     // Split Lucide icons into separate chunk to enable tree-shaking
     'lucide-icons': ['lucide-react'],
@@ -39,7 +38,7 @@ const PROJECT_CONFIG = {
   beastiesConfig: {
     inlineThreshold: 0, // Always inline critical CSS
     minimumExternalSize: 5000, // If external CSS < 5kb after pruning, inline it all
-    pruneSource: true, // Remove inlined CSS from external stylesheets
+    pruneSource: false, // Remove inlined CSS from external stylesheets
     mergeStylesheets: false, // Keep separate <style> tags for better caching
     preload: 'swap' as const,
     noscriptFallback: true,
@@ -85,23 +84,6 @@ export default defineConfig(() => {
     tailwindcss(),
     !isProduction && Inspect(),
     !isProduction && qrcode(),
-    isProduction && beasties({
-      options: {
-        external: true,
-        ...PROJECT_CONFIG.beastiesConfig,
-      },
-    }),
-    // Enable compression only when explicitly requested via env var.
-    // This prevents compressed assets from being generated before prerendering runs.
-    process.env.VITE_BUILD_COMPRESSION === 'true' && viteCompression({
-      algorithm: 'gzip',
-      deleteOriginFile: false,
-    }),
-    process.env.VITE_BUILD_COMPRESSION === 'true' && viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      deleteOriginFile: false,
-    }),
     enableAnalyzer && visualizer({
       filename: 'stats.html',
       gzipSize: true,

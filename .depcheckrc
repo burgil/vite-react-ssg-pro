@@ -1,0 +1,1 @@
+ignores: ["cross-env", "tailwindcss", "eslint-import-resolver-typescript"]

@@ -1,5 +1,5 @@
 import PageHeader from '@/components/PageHeader';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Code, Zap, Package } from 'lucide-react';
 
 export default function AboutPage() {

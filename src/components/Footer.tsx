@@ -1,6 +1,6 @@
 import { FaGithub, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 
 export default function Footer() {
@@ -25,16 +25,18 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
+                aria-label="GitHub"
               >
                 <FaGithub className="w-5 h-5" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.9 }}
-                href="https://youtube.com/@BurgilBuilds"
+                href="https://youtube.com/@GenZv1Dev"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-700 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
+                aria-label="YouTube"
               >
                 <FaYoutube className="w-5 h-5" />
               </motion.a>
