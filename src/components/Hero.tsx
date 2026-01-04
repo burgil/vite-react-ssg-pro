@@ -1,6 +1,6 @@
-﻿import { Link } from 'react-router';
-import { m as motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Zap, Star } from 'lucide-react';
+﻿import { m as motion } from 'framer-motion';
+import { Sparkles, Zap, Star } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 
 export default function Hero() {
   return (
@@ -59,28 +59,35 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row justify-center gap-4 mb-16"
+            className="flex flex-col items-center gap-4 mb-16"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link 
-                to="/about" 
-                className="group px-8 py-4 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2"
-              >
-                Get Started
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <a 
-                href="https://github.com/burgil" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="px-8 py-4 glass-panel rounded-xl font-semibold text-gray-700 hover:text-purple-600 transition-all flex items-center justify-center gap-2"
-              >
-                View on GitHub
-                <Star className="w-5 h-5" />
-              </a>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <a 
+                  href="https://payhip.com/b/OaDoU" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group px-8 py-4 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2"
+                >
+                  Get Pro Version
+                  <Sparkles className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <a 
+                  href="https://github.com/burgil/create-app" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="px-8 py-4 glass-panel rounded-xl font-semibold text-gray-700 hover:text-purple-600 transition-all flex items-center justify-center gap-2"
+                >
+                  Free Version
+                  <FaGithub className="w-5 h-5" />
+                </a>
+              </motion.div>
+            </div>
+            <p className="text-sm text-gray-400">
+              Free version does not include support or updates
+            </p>
           </motion.div>
 
           {/* Features */}

@@ -10,16 +10,31 @@
 ### Fixed
 - Resolved `ENOENT` error during `vite build` by disabling `vite-plugin-beasties` in the main build step (it is handled correctly in the prerender step).
 - Fixed CSS pruning issue by setting `pruneSource: false` in `vite.config.ts` and `prerender.ts` to prevent missing styles in shared CSS files.
+- Resolved "Double CSS Loading" issue where CSS was being loaded twice (once inlined by Beasties, and once via `<link rel="stylesheet">` or `<link rel="modulepreload">`).
+- Updated `scripts/prerender.ts` to explicitly exclude `.css` files from `modulepreload` injection.
+- Fixed `scripts/prerender.ts` regex logic to correctly identify and remove CSS links when inlining.
 
 ### Performance
 - Reduced bundle size by implementing `LazyMotion` with `domAnimation` from `framer-motion` (~38% reduction in motion chunk size).
 - Removed unused fonts (`JetBrains Mono`, `Outfit`) from `index.html` and `index.css` to improve load performance.
-- Optimized chunk splitting in `vite.config.ts` by separating `react-router` into its own vendor chunk, reducing the main vendor bundle size.
+- Optimized chunk splitting in `vite.config.ts` by separating `react-router`, `react`, and `react-dom` into individual vendor chunks for better cache isolation and diagnostic clarity.
+- Refined manual chunk splitting logic to use exact package matching and explicitly grouped `scheduler` with `react-dom` for better caching and bundle efficiency.
+- Replaced `hydrateRoot` with `createRoot` in `src/main.tsx` to resolve persistent hydration mismatch errors (#418) caused by critical CSS inlining and third-party component DOM manipulation.
+- Implemented intelligent module preloading in `scripts/prerender.ts` to inject `<link rel="modulepreload">` tags for lazy-loaded route chunks.
 - Removed redundant `vite-plugin-compression` dependency (compression is handled by `scripts/compress.ts`).
+- **CSS Optimization**: Implemented "Smart Inlining" strategy - if an external CSS file is small (< 50KB), it is fully inlined into the HTML, eliminating the network request entirely.
 
 ### Changed
 - Updated `upload` script in `package.json` to use `wrangler` directly instead of `npx`, resolving npm environment configuration warnings.
 - Added `depcheck` to `devDependencies` and the `lint` script to detect unused dependencies.
+- Updated `Hero` and `Navbar` components to distinguish between "Free Version" (GitHub) and "Pro Version" (Payhip) links.
+- Updated social links to point to the correct YouTube channel (`GenZv1Dev`).
+- Replaced deprecated `Github` icon from `lucide-react` with `FaGithub` from `react-icons/fa` in `Hero` component.
+- Updated `scripts/compress.ts` to exclude `robots.txt` and the `.vite` directory from compression to avoid processing unnecessary files.
+- Removed legacy Vite manifest fallback from `scripts/prerender.ts` (now strictly supports Vite 5+ manifest structure).
+
+### Known Limitations
+- **"Unused JavaScript" Diagnostic (~22KB in `react-dom`)**: Lighthouse reports ~22KB of unused JavaScript in `react-dom`. This is a false positive inherent to React's architecture. The "unused" code consists of React's Synthetic Event System and Fiber Reconciler, which are loaded but not immediately executed during Lighthouse's trace window. These systems are required for React to handle user interactions and cannot be tree-shaken. This is the expected "tax" of using React and is present in all React applications.
 
 ## [1.4.0] - 2025-12-29
 

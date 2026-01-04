@@ -74,12 +74,14 @@ export default function Navbar() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link 
-                  to="/about" 
+                <a 
+                  href="https://payhip.com/b/OaDoU"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-5 py-2 bg-linear-to-r from-purple-500 to-pink-500 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl transition-all"
                 >
-                  Get Started
-                </Link>
+                  Get Pro
+                </a>
               </motion.div>
             </div>
 

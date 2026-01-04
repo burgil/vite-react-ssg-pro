@@ -23,6 +23,13 @@ const seoConfigPath = path.resolve(__dirname, '../src/seo.json');
 const seoConfig = JSON.parse(fs.readFileSync(seoConfigPath, 'utf-8'));
 const globalConfig = seoConfig._global;
 
+// Read Vite Manifest
+const manifestPath = path.resolve(__dirname, '../dist/.vite/manifest.json');
+let manifest: Record<string, any> = {};
+if (fs.existsSync(manifestPath)) {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+}
+
 // Console colors
 const colors = {
     reset: '\x1b[0m',
@@ -39,6 +46,7 @@ interface RouteConfig {
     path: string;
     componentPath: string;
     outputPath: string;
+    srcPath?: string; // Relative path to source file (e.g., src/pages/home.tsx)
 }
 
 interface SEOConfig {
@@ -307,10 +315,16 @@ async function parseRouterForRoutes(): Promise<RouteConfig[]> {
     while ((match = indexRouteRegex.exec(routerContent)) !== null) {
         const [, componentName] = match;
         if (componentMap[componentName]) {
+            const absolutePath = componentMap[componentName];
+            // Convert absolute path to src-relative path for manifest lookup
+            // e.g. D:/Projects/vite-react-ssg-pro/src/pages/home.tsx -> src/pages/home.tsx
+            const srcPath = path.relative(path.resolve(__dirname, '..'), absolutePath).replace(/\\/g, '/');
+            
             routes.push({
                 path: '/',
-                componentPath: componentMap[componentName],
-                outputPath: 'index.html'
+                componentPath: absolutePath,
+                outputPath: 'index.html',
+                srcPath
             });
         }
     }
@@ -335,10 +349,14 @@ async function parseRouterForRoutes(): Promise<RouteConfig[]> {
                 continue;
             }
 
+            const absolutePath = componentMap[componentName];
+            const srcPath = path.relative(path.resolve(__dirname, '..'), absolutePath).replace(/\\/g, '/');
+
             routes.push({
                 path: normalizedPath,
-                componentPath: componentMap[componentName],
-                outputPath
+                componentPath: absolutePath,
+                outputPath,
+                srcPath
             });
         } else {
             if (componentName !== 'Layout') {
@@ -425,6 +443,48 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
 
         let html = templateHTML;
 
+        // Inject module preloads for lazy chunks
+        if (route.srcPath && manifest[route.srcPath]) {
+            const chunk = manifest[route.srcPath];
+            const preloads = [];
+            
+            // Preload the component chunk itself
+            if (chunk.file && !chunk.file.endsWith('.css')) {
+                if (!html.includes(chunk.file)) {
+                    preloads.push(`<link rel="modulepreload" href="/${chunk.file}" />`);
+                }
+            }
+            
+            // Preload imports (dependencies)
+            if (chunk.imports) {
+                chunk.imports.forEach((importKey: string) => {
+                    const importChunk = manifest[importKey];
+                    if (importChunk && importChunk.file && !importChunk.file.endsWith('.css')) {
+                        if (!html.includes(importChunk.file)) {
+                            preloads.push(`<link rel="modulepreload" href="/${importChunk.file}" />`);
+                        }
+                    }
+                });
+            }
+            
+            if (preloads.length > 0) {
+                html = html.replace('</head>', `${preloads.join('\n    ')}\n    </head>`);
+            }
+        }
+
+        // EXTRA SAFETY: Remove any modulepreload links for CSS files that might have slipped in
+        html = html.replace(/<link[^>]+rel="modulepreload"[^>]+href="[^"]+\.css"[^>]*>/g, '');
+
+        // PERFORMANCE: Remove modulepreload for large vendor chunks to reduce "Unused JavaScript" diagnostic.
+        // These will be fetched on-demand when the entry script imports them.
+        // This defers the network cost of react-dom, framer-motion, etc. until actually needed.
+        const vendorChunksToDefer = ['react-dom', 'framer-motion', 'react-router'];
+        for (const chunk of vendorChunksToDefer) {
+            // Match modulepreload links for this chunk (handles both crossorigin and non-crossorigin variants)
+            const regex = new RegExp(`<link[^>]+rel="modulepreload"[^>]+href="[^"]*${chunk}[^"]*\\.js"[^>]*>`, 'g');
+            html = html.replace(regex, '');
+        }
+
         // Inject meta tags
         const metaTags = generateMetaTags(route.path);
         html = html.replace('</head>', `${metaTags}\n    </head>`);
@@ -436,7 +496,9 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
         }
 
         // Sanitize rendered content: remove any <script> and <style> tags
-        const sanitizedAppHtml = appHtml.replace(/<(?:script|style)[^>]*>[\s\S]*?<\/(?:script|style)>/gi, '');
+        // NOTE: Disabled sanitization as it might remove styles/scripts injected by libraries (e.g. framer-motion)
+        // which are expected by React during hydration. Removing them causes hydration mismatch (#418).
+        const sanitizedAppHtml = appHtml; // .replace(/<(?:script|style)[^>]*>[\s\S]*?<\/(?:script|style)>/gi, '');
 
         // Inject rendered content
         html = html.replace(
@@ -453,36 +515,68 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
 
         // Apply Beasties to inline critical CSS
         const distPath = path.resolve(__dirname, '../dist');
-        const beasties = new Beasties({
-            path: distPath,
-            publicPath: '/',
-            preload: 'swap',
-            pruneSource: false, // Don't prune source to avoid breaking other pages sharing the same CSS
-            inlineFonts: false, // Don't inline fonts - let the HTML template handle font loading
-            preloadFonts: false, // Don't preload fonts - let the HTML template handle it
-            compress: true,
-            logLevel: 'warn', // Reduce noise
-            minimumExternalSize: 5000, // If external CSS < 5kb after pruning, inline it all
-            mergeStylesheets: false, // Keep separate <style> tags for better caching
-            keyframes: 'critical', // Only inline critical animations
-            reduceInlineStyles: false, // Don't process inline <style> tags
-            allowRules: [
-                // Force-include interactive/hover states
-                /\.btn.*:hover/,
-                /\.btn.*:active/,
-                /\.btn.*:focus/,
-                /\.nav.*:hover/,
-                /:focus-visible/,
-                /\[data-state/,
-                /^\.sr-only$/,
-                /^\.hidden$/
-            ]
-        });
+        
+        // Manual CSS Inlining Strategy:
+        // If the CSS file is small (< 50KB), we inline it entirely and skip Beasties.
+        // This avoids the "double load" (inline critical + async full) that users find bloated.
+        let cssInlined = false;
+        // Regex to capture the CSS href. Uses [^>]*? (non-greedy) to avoid consuming the href attribute.
+        const cssMatch = html.match(/<link\s+[^>]*?href="(\/assets\/[^"]+\.css)"/);
+        if (cssMatch) {
+            const cssPath = path.join(distPath, cssMatch[1]);
+            if (fs.existsSync(cssPath)) {
+                const cssStats = fs.statSync(cssPath);
+                if (cssStats.size < 50000) {
+                    console.log(`${colors.cyan}⚡ CSS is small (${(cssStats.size / 1024).toFixed(2)}KB), inlining entirely...${colors.reset}`);
+                    const cssContent = fs.readFileSync(cssPath, 'utf-8');
+                    // Replace all links to this CSS with a single style tag
+                    html = html.replace(/<link\s+[^>]*?href="[^"]+\.css"[^>]*>/g, '');
+                    // Remove noscript fallback (if any exists from previous runs or templates)
+                    html = html.replace(/<noscript><link\s+[^>]*?href="[^"]+\.css"[^>]*><\/noscript>/g, '');
+                    // Inject style tag
+                    html = html.replace('</head>', `<style>${cssContent}</style>\n    </head>`);
+                    cssInlined = true;
+                }
+            } else {
+                 console.warn(`${colors.yellow}⚠️ CSS file not found at ${cssPath}${colors.reset}`);
+            }
+        } else {
+            // console.log('No CSS link found in template');
+        }
 
-        html = await beasties.process(html);
+        if (!cssInlined) {
+            const beasties = new Beasties({
+                path: distPath,
+                publicPath: '/',
+                preload: 'swap',
+                pruneSource: false, // Don't prune source to avoid breaking other pages sharing the same CSS
+                inlineFonts: false, // Don't inline fonts - let the HTML template handle font loading
+                preloadFonts: false, // Don't preload fonts - let the HTML template handle it
+                compress: true,
+                logLevel: 'warn', // Reduce noise
+                minimumExternalSize: 50000, // Inline CSS if < 50kb. Eliminates the "double load" (inline + external) for small sites.
+                mergeStylesheets: false, // Keep separate <style> tags for better caching
+                keyframes: 'critical', // Only inline critical animations
+                reduceInlineStyles: false, // Don't process inline <style> tags
+                allowRules: [
+                    // Force-include interactive/hover states
+                    /\.btn.*:hover/,
+                    /\.btn.*:active/,
+                    /\.btn.*:focus/,
+                    /\.nav.*:hover/,
+                    /:focus-visible/,
+                    /\[data-state/,
+                    /^\.sr-only$/,
+                    /^\.hidden$/
+                ]
+            });
+
+            html = await beasties.process(html);
+        }
 
         // Collect CSS files referenced by HTML or JS bundles
         try {
+            const distPath = path.resolve(__dirname, '../dist');
             const referencedCss = new Set<string>();
             const assetsDir = path.resolve(distPath, 'assets');
             if (fs.existsSync(assetsDir)) {

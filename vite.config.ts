@@ -27,7 +27,10 @@ const PROJECT_CONFIG = {
   vendorChunks: {
     // Vendor chunks
     'react-router': ['react-router'],
-    'react-core': ['react', 'react-dom'],
+    // Split React and ReactDOM to isolate the "unused code" diagnostic
+    // (Most unused code is in react-dom's event system/reconciler)
+    'react': ['react'],
+    'react-dom': ['react-dom', 'scheduler'], // Group scheduler with react-dom
     'framer-motion': ['framer-motion'],
     // Split Lucide icons into separate chunk to enable tree-shaking
     'lucide-icons': ['lucide-react'],
@@ -64,7 +67,7 @@ const PROJECT_CONFIG = {
   // Terser (Minification) configuration
   terserConfig: {
     passes: 3, // 3-pass compression for maximum size reduction
-    dropConsole: true, // Remove console.log in production
+    // dropConsole: true, // Remove console.log in production
     dropDebugger: true,
     ecma: 2020 as const,
     hoist_funs: true,
@@ -112,6 +115,7 @@ export default defineConfig(() => {
 
   const config: UserConfig = {
     build: {
+      manifest: true, // Generate manifest.json for SSG asset mapping
       target: 'esnext',
       cssMinify: 'lightningcss',
       chunkSizeWarningLimit: 1280,
@@ -123,7 +127,12 @@ export default defineConfig(() => {
           manualChunks(id) {
             // Vendor chunks based on PROJECT_CONFIG
             for (const [chunkName, modules] of Object.entries(PROJECT_CONFIG.vendorChunks)) {
-              if (modules.some(mod => id.includes(`node_modules/${mod}`))) {
+              const isMatch = modules.some(mod => {
+                // Match exact package name in node_modules
+                // Handles both / and \ separators
+                return id.includes(`node_modules/${mod}/`) || id.includes(`node_modules\\${mod}\\`);
+              });
+              if (isMatch) {
                 return chunkName;
               }
             }
@@ -141,7 +150,7 @@ export default defineConfig(() => {
           collapse_vars: true,
           comparisons: true,
           dead_code: true,
-          drop_console: PROJECT_CONFIG.terserConfig.dropConsole && isProduction,
+          drop_console: false, // Keep console logs for debugging
           drop_debugger: PROJECT_CONFIG.terserConfig.dropDebugger,
           ecma: PROJECT_CONFIG.terserConfig.ecma,
           hoist_funs: PROJECT_CONFIG.terserConfig.hoist_funs,

@@ -7,10 +7,10 @@ export default function Footer() {
   return (
     <footer className="py-12 mt-20">
       <div className="container mx-auto px-6">
-        <div className="glass-panel rounded-2xl p-8">
+        <div className="glass-panel rounded-2xl md:p-8 p-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Policy Links */}
-            <div className="flex gap-6 text-sm order-2 md:order-1">
+            <div className="flex md:gap-6 gap-2 text-sm order-2 md:order-1">
               <Link to="/privacypolicy" className="text-gray-600 hover:text-purple-600 transition-colors">Privacy Policy</Link>
               <Link to="/terms" className="text-gray-600 hover:text-purple-600 transition-colors">Terms of Service</Link>
               <Link to="/cookiepolicy" className="text-gray-600 hover:text-purple-600 transition-colors">Cookie Policy</Link>
@@ -44,7 +44,7 @@ export default function Footer() {
 
             {/* Copyright */}
             <div className="text-gray-600 text-sm order-3 flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Create App
+              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Burgil AKA GenZ v1 Dev
             </div>
           </div>
         </div>

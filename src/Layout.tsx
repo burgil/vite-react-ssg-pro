@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from 'react-router';
-import { type FC, Suspense, lazy, useEffect } from 'react';
+import { type FC, Suspense, useEffect } from 'react';
 import SEOTitle from './components/SEOTitle';
 import LoadingScreen from './components/LoadingScreen';
-const Navbar = lazy(() => import('@/components/Navbar'));
+import Navbar from '@/components/Navbar';
 import Footer from './components/Footer';
 
 const Layout: FC = () => {
@@ -17,9 +17,7 @@ const Layout: FC = () => {
     <>
       <SEOTitle />
       <main data-beasties-container className="min-h-screen bg-black selection:bg-blue-500/30 selection:text-blue-200 font-sans text-white">
-        <Suspense fallback={<div className="h-16" />}>
-          <Navbar />
-        </Suspense>
+        <Navbar />
         <Outlet />
         <Footer />
       </main>

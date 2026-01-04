@@ -27,6 +27,7 @@ async function walk(dir: string): Promise<string[]> {
   for (const entry of entries) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
+      if (entry.name === '.vite') continue;
       files.push(...await walk(full));
     } else {
       files.push(full);
@@ -38,6 +39,10 @@ async function walk(dir: string): Promise<string[]> {
 async function compressFile(filePath: string) {
   // Skip already compressed files
   if (filePath.endsWith('.gz') || filePath.endsWith('.br')) return;
+
+  // Skip specific files that shouldn't be compressed
+  if (path.basename(filePath) === 'robots.txt') return;
+
   const ext = path.extname(filePath).toLowerCase();
   if (!compressExtensions.has(ext)) return;
   try {
