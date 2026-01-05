@@ -29,8 +29,7 @@ const PROJECT_CONFIG = {
     'react-router': ['react-router'],
     // Split React and ReactDOM to isolate the "unused code" diagnostic
     // (Most unused code is in react-dom's event system/reconciler)
-    'react': ['react'],
-    'react-dom': ['react-dom', 'scheduler'], // Group scheduler with react-dom
+    'react': ['react', 'react-dom', 'scheduler'],
     'framer-motion': ['framer-motion'],
     // Split Lucide icons into separate chunk to enable tree-shaking
     'lucide-icons': ['lucide-react'],

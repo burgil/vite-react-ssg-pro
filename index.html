@@ -20,28 +20,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=optional"
       rel="stylesheet">
   </noscript>
-
-  <!-- Inline Critical CSS -->
-  <style>
-    :root {
-      --font-inter: 'Inter', sans-serif;
-      --background: #020204;
-      --foreground: #ededed;
-    }
-    body {
-      color: var(--foreground);
-      background: var(--background);
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-    }
-    /* Critical utilities often used above-the-fold */
-    .bg-black { background-color: #000; }
-    .text-white { color: #fff; }
-    .min-h-screen { min-height: 100vh; }
-  </style>
 </head>
 
-<body class="font-sans antialiased bg-[#020204] text-white selection:bg-blue-500/30 selection:text-blue-100">
+<body class="font-sans antialiased selection:bg-blue-500/30 selection:text-blue-100">
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
