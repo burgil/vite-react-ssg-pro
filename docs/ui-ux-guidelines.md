@@ -1,4 +1,4 @@
-## UI & UX Guidelines — Premium Minimal Design
+## UI & UX Guidelines - Premium Minimal Design
 
 This document describes the UI/UX design intent for the Vite React SSG Pro, and explains how to use and maintain the `.agent`, `.github` directories and README links. It also includes a practical checklist and guidelines to achieve a premium, minimal, and accessible UI.
 
@@ -14,13 +14,13 @@ This document describes the UI/UX design intent for the Vite React SSG Pro, and 
 ### Design Goals
 Make the UI/UX feel premium, minimal, and polished as if designed by a team at Apple, Google, or Tesla.
 
-1. Hierarchy — Use type, color, and spacing to lead the eye. Title > Subtitle > Body. Extra whitespace for clarity.
-2. Progressive Disclosure — Show a minimal set of actions and reveal more controls on interaction or deeper pages.
-3. Consistency — Reuse tokens (colors, spacing, border radius) and component patterns across pages.
-4. Contrast — Maintain high contrast for primary CTAs and sufficient contrast for text accessibility.
-5. Accessibility — Follow WCAG: semantic markup, keyboard focus, alt text, and color contrast checks.
-6. Proximity — Group related controls and information logically (e.g., navbar cluster, content cluster).
-7. Alignment — Use a 12 column grid, 8px base spacing and consistent vertical rhythm.
+1. Hierarchy - Use type, color, and spacing to lead the eye. Title > Subtitle > Body. Extra whitespace for clarity.
+2. Progressive Disclosure - Show a minimal set of actions and reveal more controls on interaction or deeper pages.
+3. Consistency - Reuse tokens (colors, spacing, border radius) and component patterns across pages.
+4. Contrast - Maintain high contrast for primary CTAs and sufficient contrast for text accessibility.
+5. Accessibility - Follow WCAG: semantic markup, keyboard focus, alt text, and color contrast checks.
+6. Proximity - Group related controls and information logically (e.g., navbar cluster, content cluster).
+7. Alignment - Use a 12 column grid, 8px base spacing and consistent vertical rhythm.
 
 ### Visual System (Suggested)
 - **Color Palette**: Neutral base + single accent. Example: `#0f172a` (navy base), `#ffffff` (paper), `#0ea5a3` (accent teal), `#f3f4f6` (muted gray).
@@ -35,7 +35,7 @@ Make the UI/UX feel premium, minimal, and polished as if designed by a team at A
 - **Hero**: Large headline, concise subheading, and single primary CTA. Use a secondary smaller CTA for lesser importance.
 - **Buttons**: Primary high contrast; secondary muted; destructive red for dangerous actions only.
 - **Forms**: Label above input, clear helper text, keyboard accessible focus state. Use error inline messaging for validation.
-- **Cards**: Use consistent padding and elevation. Keep micro interactions subtle (scale 1.02, 60ms) — no heavy springing.
+- **Cards**: Use consistent padding and elevation. Keep micro interactions subtle (scale 1.02, 60ms) - no heavy springing.
 
 ### Interactions & Motion
 - Use Framer Motion for subtle entrance/hover interactions.
@@ -51,7 +51,7 @@ Make the UI/UX feel premium, minimal, and polished as if designed by a team at A
 ### Implementation Tips
 - Use Tailwind design tokens and classes where appropriate; scope custom variables in `index.css`.
 - Store global colors and spacing in `tailwind.config.js` to maintain consistency.
-- The template has a `Hero` and `Navbar` — follow these patterns for future components.
+- The template has a `Hero` and `Navbar` - follow these patterns for future components.
 
 ### Where to Add Changes
 - Update `src/components/*.tsx` when creating or refactoring components.

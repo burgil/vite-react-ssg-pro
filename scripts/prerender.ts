@@ -490,15 +490,9 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
         // EXTRA SAFETY: Remove any modulepreload links for CSS files that might have slipped in
         html = html.replace(/<link[^>]+rel="modulepreload"[^>]+href="[^"]+\.css"[^>]*>/g, '');
 
-        // PERFORMANCE: Remove modulepreload for large vendor chunks to reduce "Unused JavaScript" diagnostic.
-        // These will be fetched on-demand when the entry script imports them.
-        // This defers the network cost of react-dom, framer-motion, etc. until actually needed.
-        const vendorChunksToDefer = ['react-dom', 'framer-motion', 'react-router'];
-        for (const chunk of vendorChunksToDefer) {
-            // Match modulepreload links for this chunk (handles both crossorigin and non-crossorigin variants)
-            const regex = new RegExp(`<link[^>]+rel="modulepreload"[^>]+href="[^"]*${chunk}[^"]*\\.js"[^>]*>`, 'g');
-            html = html.replace(regex, '');
-        }
+        // NOTE: Do NOT defer framer-motion or react-router modulepreload links.
+        // Removing them creates a sequential download chain (index → framer-motion → react-router)
+        // that adds ~316ms of critical-path latency and tanks FCP/LCP scores.
 
         // Inject meta tags
         const metaTags = generateMetaTags(route.path);

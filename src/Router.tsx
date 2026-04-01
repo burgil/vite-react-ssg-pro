@@ -2,8 +2,8 @@ import { lazy } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router'
 import ErrorBoundary from './components/ErrorBoundary'
 import Layout from './Layout'
+import Home from './pages/home'
 
-const Home = lazy(() => import('./pages/home'))
 const About = lazy(() => import('./pages/about'))
 const SuspenseExample = lazy(() => import('./pages/SuspenseExample'))
 

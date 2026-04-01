@@ -25,39 +25,27 @@ export default function Hero() {
       <div className="container mx-auto px-6 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel mb-8"
           >
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-medium text-gray-700">Vite + React + TypeScript</span>
           </motion.div>
-          
+
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
             className="text-6xl lg:text-8xl font-black mb-6 leading-tight"
           >
             <span className="gradient-text">Build Amazing</span>
             <br />
             <span className="text-gray-100">Web Apps Fast</span>
           </motion.h1>
-          
+
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
             className="text-xl text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed"
           >
             A modern starter template with everything you need: beautiful animations, icons, routing, and more. Start building in seconds.
           </motion.p>
-          
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col items-center gap-4 mb-16"
           >
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -77,9 +65,6 @@ export default function Hero() {
 
           {/* Features */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto"
           >
             {[
