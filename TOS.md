@@ -21,16 +21,6 @@ You purchased this template via [Payhip](https://payhip.com/burgil). You are gra
 - ✅ Ongoing updates and maintenance
 - ✅ Priority support
 
-### Free Version (Legacy)
-
-A free MIT-licensed version exists at [github.com/burgil/create-app](https://github.com/burgil/create-app). Note:
-
-- ⚠️ **Unmaintained** - No new features or updates
-- ⚠️ **Legacy code** - Older versions of dependencies
-- ✅ Community support only via GitHub Issues
-
-**For the latest features, updates, and support - use this commercial version.**
-
 ## 3. Use Cases
 
 ### ✅ Permitted Uses
@@ -100,11 +90,6 @@ You are responsible for complying with all third-party licenses.
 - Priority support for issues with the template
 - Contact: [@burgil](https://github.com/burgil)
 
-### Free MIT Version Users
-- Community support only
-- No guaranteed response time
-- No new updates
-
 ## 8. Updates
 
 As a commercial license holder, you receive:
@@ -149,7 +134,7 @@ These Terms constitute the entire agreement between you and the authors regardin
 
 For questions about these Terms:
 
-- Open an issue: [github.com/burgil/create-app/issues](https://github.com/burgil/create-app/issues)
+- Open an issue: [github.com/burgil/vite-react-ssg-pro/issues](https://github.com/burgil/vite-react-ssg-pro/issues)
 - Contact via GitHub profile: [@burgil](https://github.com/burgil)
 
 ---

@@ -31,13 +31,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+errors.html
+errors-unused.log
+errors-ts.log
+errors-eslint.log
+src-errors
 
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts

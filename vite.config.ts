@@ -1,9 +1,10 @@
 import { defineConfig, type PluginOption, type UserConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import checker from "vite-plugin-checker";
+import react from "@vitejs/plugin-react";
+// import checker from "vite-plugin-checker";
 import Inspect from "vite-plugin-inspect";
 import { qrcode } from "vite-plugin-qrcode";
 import { visualizer } from "rollup-plugin-visualizer";
+// import wranglerPagesFunctionsDev from './scripts/wrangler';
 import path from "path";
 import tailwindcss from '@tailwindcss/vite';
 // import reactScan from '@react-scan/vite-plugin-react-scan';
@@ -92,22 +93,27 @@ export default defineConfig(() => {
       brotliSize: true,
       template: 'sunburst',
     }),
-    checker({
-      typescript: {
-        root: '.',
-        tsconfigPath: './tsconfig.json',
-        buildMode: true,
-      },
-      overlay: {
-        initialIsOpen: false,
-        position: 'br',
-      },
-      terminal: true,
-      eslint: {
-        lintCommand: 'eslint .',
-        useFlatConfig: true
-      }
-    })
+    // Proxy Cloudflare Functions during development for seamless API integration without CORS issues (Ask me about this setup if you're not familiar - it's a game-changer for local development with serverless functions!)
+    // !process.argv.includes('build') && wranglerPagesFunctionsDev({
+    //   matchRoutes: [/^\/api/, /^\/files/],
+    //   displayWranglerLogs: true,
+    // }),
+    // checker({
+    //   typescript: {
+    //     root: '.',
+    //     tsconfigPath: './tsconfig.json',
+    //     buildMode: true,
+    //   },
+    //   overlay: {
+    //     initialIsOpen: false,
+    //     position: 'br',
+    //   },
+    //   terminal: true,
+    //   eslint: {
+    //     lintCommand: 'eslint .',
+    //     useFlatConfig: true
+    //   }
+    // })
   ];
 
   const sharedPlugins = possiblePlugins.filter((plugin): plugin is PluginOption => Boolean(plugin));
@@ -116,8 +122,7 @@ export default defineConfig(() => {
     build: {
       manifest: true, // Generate manifest.json for SSG asset mapping
       target: 'esnext',
-      cssMinify: 'lightningcss',
-      chunkSizeWarningLimit: 1280,
+      chunkSizeWarningLimit: 2000,
       modulePreload: {
         polyfill: false, // Beasties handles preloading
       },
@@ -169,11 +174,13 @@ export default defineConfig(() => {
       }
     },
     plugins: sharedPlugins,
-    esbuild: {
-      drop: isProduction ? ['debugger'] : [],
-      target: 'esnext',
-    },
+    // esbuild: {
+    //   drop: isProduction ? ['debugger'] : [],
+    //   target: 'esnext',
+    // },
     server: {
+      host: true,
+      strictPort: true,
       warmup: {
         clientFiles: PROJECT_CONFIG.warmupFiles,
       },
@@ -181,6 +188,7 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        "@emails": path.resolve(__dirname, "./emails"),
       },
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     },

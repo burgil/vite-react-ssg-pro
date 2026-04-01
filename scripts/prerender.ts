@@ -1,6 +1,11 @@
 // This script prerenders all routes to static HTML for SSG (static site generation). It does NOT provide runtime SSR.
 // All output is static and deployable to any static host.
 
+// Register a Node.js module hook to stub binary asset imports (mp3, images, fonts, etc.)
+// Vite transforms these to hashed URL strings at build time, but Node.js cannot load binary files as ES modules.
+import { register } from 'node:module';
+register(new URL('./asset-hooks.mjs', import.meta.url));
+
 import { createElement } from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { PassThrough } from 'stream';
@@ -101,7 +106,6 @@ function generateMetaTags(routePath: string): string {
             if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
             if (ext === '.png') return 'image/png';
             if (ext === '.tif' || ext === '.tiff') return 'image/tiff';
-            return '';
             return '';
         } catch {
             return '';
@@ -283,6 +287,10 @@ async function parseRouterForRoutes(): Promise<RouteConfig[]> {
     while ((match = lazyImportRegex.exec(routerContent)) !== null) {
         const [, componentName, importPath] = match;
         let resolvedPath = importPath;
+        // Handle @/ alias - resolve to src/
+        if (resolvedPath.startsWith('@/')) {
+            resolvedPath = resolvedPath.substring(2);
+        }
         if (resolvedPath.startsWith('./')) {
             resolvedPath = resolvedPath.substring(2);
         }
@@ -319,7 +327,7 @@ async function parseRouterForRoutes(): Promise<RouteConfig[]> {
             // Convert absolute path to src-relative path for manifest lookup
             // e.g. D:/Projects/vite-react-ssg-pro/src/pages/home.tsx -> src/pages/home.tsx
             const srcPath = path.relative(path.resolve(__dirname, '..'), absolutePath).replace(/\\/g, '/');
-            
+
             routes.push({
                 path: '/',
                 componentPath: absolutePath,
@@ -338,6 +346,12 @@ async function parseRouterForRoutes(): Promise<RouteConfig[]> {
 
         if (!normalizedPath.startsWith('/')) {
             normalizedPath = '/' + normalizedPath;
+        }
+
+        // Skip dynamic routes for now
+        if (normalizedPath.includes(':')) {
+            console.warn(`${colors.yellow}⚠️  Skipping dynamic route:${colors.reset} ${normalizedPath}`);
+            continue;
         }
 
         if (componentMap[componentName]) {
@@ -415,6 +429,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
                     didError = true;
                     // Non-fatal; log and keep rendering
                     console.error(`${colors.red}⚠️ React render error:${colors.reset}`, err);
+                    process.exit(1);
                 },
                 onShellError(err) {
                     didError = true;
@@ -447,14 +462,14 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
         if (route.srcPath && manifest[route.srcPath]) {
             const chunk = manifest[route.srcPath];
             const preloads = [];
-            
+
             // Preload the component chunk itself
             if (chunk.file && !chunk.file.endsWith('.css')) {
                 if (!html.includes(chunk.file)) {
                     preloads.push(`<link rel="modulepreload" href="/${chunk.file}" />`);
                 }
             }
-            
+
             // Preload imports (dependencies)
             if (chunk.imports) {
                 chunk.imports.forEach((importKey: string) => {
@@ -466,7 +481,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
                     }
                 });
             }
-            
+
             if (preloads.length > 0) {
                 html = html.replace('</head>', `${preloads.join('\n    ')}\n    </head>`);
             }
@@ -515,7 +530,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
 
         // Apply Beasties to inline critical CSS
         const distPath = path.resolve(__dirname, '../dist');
-        
+
         // Manual CSS Inlining Strategy:
         // If the CSS file is small (< 50KB), we inline it entirely and skip Beasties.
         // This avoids the "double load" (inline critical + async full) that users find bloated.
@@ -538,7 +553,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
                     cssInlined = true;
                 }
             } else {
-                 console.warn(`${colors.yellow}⚠️ CSS file not found at ${cssPath}${colors.reset}`);
+                console.warn(`${colors.yellow}⚠️ CSS file not found at ${cssPath}${colors.reset}`);
             }
         } else {
             // console.log('No CSS link found in template');
@@ -616,6 +631,7 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
 
     } catch (error) {
         console.error(`${colors.red}❌ Failed to render${colors.reset} ${route.path}:`, error);
+        process.exit(1);
     }
 }
 
@@ -629,7 +645,39 @@ async function prerender() {
         const globalAny = global as Record<string, unknown>;
         globalAny.window = window;
         globalAny.document = window.document;
+
+        // Use defineProperty for read-only globals if needed
+        if (!globalAny.navigator) {
+            Object.defineProperty(globalAny, 'navigator', {
+                value: window.navigator,
+                configurable: true,
+                writable: true
+            });
+        }
+        if (!globalAny.location) {
+            Object.defineProperty(globalAny, 'location', {
+                value: window.location,
+                configurable: true,
+                writable: true
+            });
+        }
+
+        globalAny.DOMMatrix = globalAny.DOMMatrix || class DOMMatrix { };
+        globalAny.DOMRect = globalAny.DOMRect || class DOMRect { };
+        globalAny.DOMPoint = globalAny.DOMPoint || class DOMPoint { };
         globalAny.getComputedStyle = window.getComputedStyle.bind(window);
+        globalAny.SVGElement = window.SVGElement;
+        globalAny.HTMLElement = window.HTMLElement;
+        globalAny.Element = window.Element;
+
+        // Suppress useLayoutEffect warnings
+        const originalConsoleError = console.error;
+        console.error = (...args: any[]) => {
+            if (typeof args[0] === 'string' && args[0].includes('useLayoutEffect does nothing on the server')) {
+                return;
+            }
+            originalConsoleError(...args);
+        };
 
         // Set SSR flags for components to detect
         (global as unknown as { __SSR__: boolean }).__SSR__ = true;

@@ -1,6 +1,5 @@
 ﻿import { m as motion } from 'framer-motion';
 import { Sparkles, Zap, Star } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa';
 
 export default function Hero() {
   return (
@@ -73,21 +72,7 @@ export default function Hero() {
                   <Sparkles className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <a 
-                  href="https://github.com/burgil/create-app" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="px-8 py-4 glass-panel rounded-xl font-semibold text-gray-700 hover:text-purple-600 transition-all flex items-center justify-center gap-2"
-                >
-                  Free Version
-                  <FaGithub className="w-5 h-5" />
-                </a>
-              </motion.div>
             </div>
-            <p className="text-sm text-gray-400">
-              Free version does not include support or updates
-            </p>
           </motion.div>
 
           {/* Features */}

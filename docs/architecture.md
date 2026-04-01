@@ -337,7 +337,7 @@ No server means:
 
 ### Adding a Backend
 
-Option 1: **Serverless Functions** (Cloudflare Workers, Vercel Functions)
+Option 1: **Serverless Functions** (Cloudflare Workers)
 ```typescript
 // api/hello.ts
 export default function handler(req, res) {
@@ -357,18 +357,6 @@ Use services like:
 - **Clerk** - Drop-in auth components
 - **Auth0** - Enterprise SSO
 - **Supabase** - Backend + auth
-
-## Monitoring & Analytics
-
-Add client-side tracking:
-
-```tsx
-// main.tsx
-import { inject } from '@vercel/analytics';
-inject();
-```
-
-Or server-side with Cloudflare Analytics (zero performance impact).
 
 ## Next Steps
 

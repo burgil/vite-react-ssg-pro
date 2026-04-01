@@ -1,5 +1,55 @@
 # Changelog
 
+## [1.6.0] - 2026-04-01
+
+### Dependencies
+- Upgraded **Vite** from `^7.3.0` to `^8.0.3`
+- Upgraded **TypeScript** from `~5.9.3` to `~6.0.2`
+- Upgraded **ESLint** from `^9.39.2` to `^10.1.0` (and `@eslint/js` accordingly)
+- Upgraded **Knip** from `^5.79.0` to `^6.1.1`
+- Upgraded **Tailwind CSS** from `^4.1.18` to `^4.2.2` (and `@tailwindcss/vite` accordingly)
+- Upgraded **Framer Motion** from `^12.23.26` to `^12.38.0`
+- Upgraded **Lucide React** from `^0.562.0` to `^1.7.0`
+- Upgraded **React** and **React DOM** from `^19.2.3` to `^19.2.4`
+- Upgraded **React Router** from `^7.11.0` to `^7.13.2`
+- Upgraded **React Icons** from `^5.5.0` to `^5.6.0`
+- Upgraded **rollup-plugin-visualizer** from `^6.0.5` to `^7.0.1`
+- Upgraded **Terser** from `^5.44.1` to `^5.46.1`
+- Upgraded **Beasties** from `^0.3.5` to `^0.4.1`
+- Upgraded **Happy DOM** from `^20.0.11` to `^20.8.9`
+- Upgraded **Globals** from `^17.0.0` to `^17.4.0`
+- Upgraded **`@types/react`** from `^19.2.7` to `^19.2.14`
+- Upgraded **`@types/node`** from `^25.0.3` to `^25.5.0`
+- Upgraded **`@typescript-eslint/parser`** and **`typescript-eslint`** from `^8.51.0` to `^8.58.0`
+- Upgraded **`eslint-plugin-react-refresh`** from `^0.4.26` to `^0.5.2`
+- Upgraded **`vite-plugin-qrcode`** from `^0.3.0` to `^0.4.1`
+- Upgraded **Wrangler** from `^4.54.0` to `^4.79.0`
+- Upgraded **pnpm** from `10.26.2` to `10.33.0`
+- Replaced **`@vitejs/plugin-react-swc`** with **`@vitejs/plugin-react`** (Babel-based)
+- Removed **`lightningcss`** (no longer used for CSS minification)
+- Removed **`vite-plugin-checker`** (TypeScript/ESLint checking now handled via dedicated lint script)
+- Removed **`@swc/core`** from `pnpm-workspace.yaml` `onlyBuiltDependencies` (no longer installed)
+
+### Changed
+- **`lint` script** split into separate concerns: `lint` now runs `tsx scripts/lint.ts` (custom orchestrator), and a dedicated `unused` script runs Knip + depcheck independently.
+- **`og-screenshots` script** port changed from `4173` (preview server) to `5173` (dev server).
+- **`scripts/lint.ts`**: New custom lint orchestrator script replacing the old inline `lint` shell command; runs ESLint, TypeScript, and unused-dependency checks with structured output.
+- **`scripts/asset-hooks.mjs`**: New Node.js module hook that stubs binary asset imports (images, fonts, audio) during SSR prerendering so Node.js doesn't try to load them as ES modules.
+- **`vite.config.ts`**: Removed `cssMinify: 'lightningcss'`, increased `chunkSizeWarningLimit` from 1280 to 2000, disabled `esbuild.drop` block, added `server.host: true` and `server.strictPort: true`, added `@emails` path alias, removed `vite-plugin-checker` plugin.
+- **ESLint config** (`eslint.config.mjs`): Migrated to ESLint 10 flat config style with `projectService: true`, added compatibility shim (`compat/no-deprecated`) to patch `@typescript-eslint/no-deprecated` crash in ESLint 10, consolidated `react-hooks` and `import` plugin registrations into the main config block, removed `DO NOT EDIT` comments, added `css: 'always'` to `import/extensions` pattern.
+- **`tsconfig.node.json`**: Added `tsBuildInfoFile` pointing to `./node_modules/.tmp/tsconfig.node.tsbuildinfo` for incremental build caching.
+- **`.gitignore`**: Added `errors.html`, `errors-unused.log`, `errors-ts.log`, `errors-eslint.log`, `src-errors`, and removed `.vercel` and `next-env.d.ts` entries.
+
+### Fixed
+- **`scripts/prerender.ts`**: Removed duplicate `return ''` statement in MIME type detection, fixed `@/` alias resolution (now correctly strips the `@` prefix and resolves to `src/`), added skip logic for dynamic routes (`:param`), added `process.exit(1)` on render errors to fail fast instead of silently continuing, added polyfills for `navigator`, `location`, `DOMMatrix`, `DOMRect`, `DOMPoint`, `SVGElement`, `HTMLElement`, `Element` globals in the Happy DOM environment, suppressed `useLayoutEffect` server warning, registered Node.js module hook (`asset-hooks.mjs`) to stub binary asset imports during SSR.
+- Fixed indentation of `console.warn` call for missing CSS file path in `scripts/prerender.ts`.
+
+### Removed
+- **Hero component**: Removed "Free Version" button linking to `github.com/burgil/create-app` and associated disclaimer text; removed `FaGithub` import from `react-icons/fa`.
+- **Docs**: Removed Vercel, Netlify, GitHub Pages, AWS S3/CloudFront, and Docker deployment sections from `docs/deployment.md`; removed Vercel/Netlify-specific DNS, rollback, and SPA routing entries. Removed Vercel analytics example and Clerk/Contentful integration examples from `docs/customization.md`. Removed Vercel monitoring section from `docs/architecture.md`. Updated all Brotli references from "Cloudflare/Vercel" to "Cloudflare" only.
+- **License/TOS/README**: Removed all references to the legacy free MIT version (`github.com/burgil/create-app`); updated copyright year to 2026; corrected TOS support issue tracker URL to `github.com/burgil/vite-react-ssg-pro/issues`; narrowed deployment options to Cloudflare Pages only.
+- **OG screenshot script**: Clarified prompt text from "Skip overwriting" to "Skip generating new ones".
+
 ## [1.5.0] - 2026-01-05
 
 ### Accessibility
@@ -27,8 +77,7 @@
 ### Changed
 - Updated `upload` script in `package.json` to use `wrangler` directly instead of `npx`, resolving npm environment configuration warnings.
 - Added `depcheck` to `devDependencies` and the `lint` script to detect unused dependencies.
-- Updated `Hero` and `Navbar` components to distinguish between "Free Version" (GitHub) and "Pro Version" (Payhip) links.
-- Updated social links to point to the correct YouTube channel (`GenZv1Dev`).
+- Updated `Hero` and `Navbar` components.
 - Replaced deprecated `Github` icon from `lucide-react` with `FaGithub` from `react-icons/fa` in `Hero` component.
 - Updated `scripts/compress.ts` to exclude `robots.txt` and the `.vite` directory from compression to avoid processing unnecessary files.
 - Removed legacy Vite manifest fallback from `scripts/prerender.ts` (now strictly supports Vite 5+ manifest structure).
@@ -137,13 +186,13 @@ Production-ready Vite + React 19 template with SSG capabilities achieving 100/10
 - SEO configuration guide
 - Performance optimization guide
 - React Suspense patterns guide
-- Deployment guide (Cloudflare, Vercel, Netlify)
+- Deployment guide (Cloudflare)
 - UI/UX guidelines
 - Customization guide
 
 #### Deployment
 - One-command Cloudflare Pages deploy (`pnpm upload`)
-- Vercel/Netlify ready
+- Cloudflare ready
 - GitHub Pages compatible
 - Any static hosting supported
 

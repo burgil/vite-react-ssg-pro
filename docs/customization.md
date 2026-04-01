@@ -644,13 +644,7 @@ function ContactForm() {
 
 **Google Analytics**:
 
-```tsx
-// main.tsx
-import { inject } from '@vercel/analytics';
-inject();
-```
-
-Or add to `index.html`:
+add to `index.html`:
 
 ```html
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -660,41 +654,6 @@ Or add to `index.html`:
   gtag('js', new Date());
   gtag('config', 'GA_MEASUREMENT_ID');
 </script>
-```
-
-### Add Authentication
-
-**Using Clerk**:
-
-```bash
-pnpm add @clerk/clerk-react
-```
-
-```tsx
-// main.tsx
-import { ClerkProvider } from '@clerk/clerk-react';
-
-<ClerkProvider publishableKey="pk_test_...">
-  <App />
-</ClerkProvider>
-```
-
-### Add CMS
-
-**Contentful Example**:
-
-```bash
-pnpm add contentful
-```
-
-```tsx
-// lib/contentful.ts
-import { createClient } from 'contentful';
-
-export const client = createClient({
-  space: 'your-space-id',
-  accessToken: 'your-access-token'
-});
 ```
 
 ---

@@ -25,7 +25,6 @@ A battle-tested Vite + React template that generates **fully static sites** with
 - ✅ **Maintained & Updated** - Get the latest features and fixes
 - ✅ **Priority Support** - Direct help when you need it
 
-**Free MIT version**: https://github.com/burgil/create-app (legacy, unmaintained)  
 **Commercial License**: https://payhip.com/burgil
 
 ---
@@ -62,7 +61,7 @@ Most React apps fail at SEO because they're client-side rendered. Traditional SS
 
 ✅ **Perfect SEO** - Pre-rendered HTML for every page  
 ✅ **Lightning Fast** - Static files served from CDN  
-✅ **Zero Backend** - Deploy anywhere (Cloudflare, Vercel, Netlify)  
+✅ **Zero Backend** - Deploy anywhere (Cloudflare)  
 ✅ **Free hosting** - Static hosting is practically free  
 ✅ **Google Loves It** - Perfect Lighthouse scores out of the box  
 
@@ -158,9 +157,6 @@ SEO Score: 💯 100/100
 This template generates **100% static files**. Deploy to:
 
 - **Cloudflare Pages** - Free, blazing fast edge network
-- **Vercel** - Zero config deployment
-- **Netlify** - Instant Git integration
-- **GitHub Pages** - Free hosting for open source
 - **Any static host** - Upload dist/ folder, done
 
 No serverless functions, no Node.js runtime, no hidden costs.
@@ -217,7 +213,7 @@ Perfect for:
 
 1. **Read** [Getting Started](docs/getting-started.md) to build your first page
 2. **Customize** colors, fonts, and content in `tailwind.config.js` and `src/`
-3. **Deploy** to Cloudflare Pages or Vercel (takes 2 minutes)
+3. **Deploy** to Cloudflare Pages (takes 2 minutes)
 4. **Ship** your epic project to the world 🚀
 
 ---

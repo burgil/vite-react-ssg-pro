@@ -11,13 +11,33 @@ import eslintComments from 'eslint-plugin-eslint-comments';
 import { defineConfig } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 
+// Compatibility shim for @typescript-eslint/no-deprecated which crashes in ESLint 10
+// due to context.parserOptions being undefined.
+const compatibilityPlugin = {
+  rules: {
+    'no-deprecated': {
+      ... /** @type {any} */ (tseslint.plugin).rules['no-deprecated'],
+      create(/** @type {any} */ context, /** @type {any[]} */ ...args) {
+        const proxyContext = new Proxy(context, {
+          get(target, prop) {
+            if (prop === 'parserOptions') {
+              return target.parserOptions || target.languageOptions?.parserOptions || {};
+            }
+            return target[prop];
+          },
+        });
+        return /** @type {any} */ (tseslint.plugin).rules['no-deprecated'].create(proxyContext, ...args);
+      },
+    },
+  },
+};
+
 export default defineConfig(
-  reactHooks.configs.flat.recommended,
-  importPlugin.flatConfigs.recommended,
   {
     ignores: [
       'dist',
       'media',
+      // 'functions',
       'docs',
       'scripts',
       'server',
@@ -29,45 +49,46 @@ export default defineConfig(
       '.git',
       'node_modules',
       'types/**/*.d.ts',
-      'eslint.config.mjs',
+      'eslint.config.mjs'
     ]
   },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    files: ['vite.config.ts'],
-    languageOptions: {
-      ecmaVersion: "latest",
-      globals: globals.node,
-      parser: tsparser,
-    },
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
-    rules: {
-      ...eslint.configs.recommended.rules,
-    },
-  },
-  {
-    extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: "latest",
       globals: globals.browser,
       parser: tsparser,
       parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
-      'react': react, // DO NOT EDIT THAT LINE
-      'react-refresh': reactRefresh, // DO NOT EDIT THAT LINE
-      'eslint-comments': eslintComments, // DO NOT EDIT THAT LINE
+      'react': react,
+      'react-hooks': /** @type {any} */ (reactHooks),
+      'react-refresh': reactRefresh,
+      'eslint-comments': eslintComments,
+      'import': importPlugin,
+      'compat': compatibilityPlugin,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [ // DO NOT EDIT THAT LINE
+      ...importPlugin.flatConfigs.recommended.rules,
+      'compat/no-deprecated': 'error',
+      'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true }, // DO NOT EDIT THAT LINE
+        { allowConstantExport: true },
       ],
       'import/extensions': [
         'error',
@@ -76,13 +97,8 @@ export default defineConfig(
           ignorePackages: true,
           pattern: {
             json: 'always',
+            css: 'always',
           },
-          pathGroupOverrides: [
-            {
-              pattern: 'three/**',
-              action: 'ignore',
-            },
-          ],
         },
       ],
       "no-restricted-imports": [
@@ -96,56 +112,50 @@ export default defineConfig(
           ]
         }
       ],
-      'import/no-unresolved': 'off', //  DO NOT EDIT THAT LINE
-      'import/no-named-as-default': 'off', // DO NOT EDIT THAT LINE
-      'import/no-duplicates': 'error', // DO NOT EDIT THAT LINE
-      'import/named': 'off', // DO NOT EDIT THAT LINE
-      '@typescript-eslint/ban-ts-comment': [ // DO NOT EDIT THAT LINE
-        'error', // DO NOT EDIT THAT LINE
+      'import/no-unresolved': 'off',
+      'import/no-named-as-default': 'off',
+      'import/no-duplicates': 'error',
+      'import/named': 'off',
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
         {
-          'ts-ignore': true, // DO NOT EDIT THAT LINE
-          'ts-expect-error': true, // DO NOT EDIT THAT LINE
-          'ts-nocheck': true, // DO NOT EDIT THAT LINE
-          'ts-check': true, // DO NOT EDIT THAT LINE
+          'ts-ignore': true,
+          'ts-expect-error': true,
+          'ts-nocheck': true,
+          'ts-check': true,
         },
       ],
-      'no-void': 'error', // DO NOT EDIT THAT LINE
+      'no-void': 'error',
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': [
-        'error', // <-- Must be 'error'
+        'error',
         {
-          // We need these 'allow' options so valid code like 'a && b()' works, 
-          // but they do not allow useless Boolean(dt)
           'allowShortCircuit': true,
           'allowTernary': true,
           'allowTaggedTemplates': true,
-
-          // This is a strict flag that ensures every expression has a clear side effect
           'enforceForJSX': true
         }
       ],
-      // '@typescript-eslint/no-non-null-assertion': 'error',
       'no-extra-boolean-cast': 'error',
-      "@typescript-eslint/no-deprecated": "error", // DO NOT EDIT THAT LINE
-      '@typescript-eslint/no-explicit-any': 'error', // DO NOT EDIT THAT LINE
-      '@typescript-eslint/no-unused-vars': ['error', { // DO NOT EDIT THAT LINE
-        // 'argsIgnorePattern': '^_', // DO NOT EDIT THAT LINE
-        // 'varsIgnorePattern': '^_', // DO NOT EDIT THAT LINE
-        'caughtErrors': 'all', // DO NOT EDIT THAT LINE
+      // "@typescript-eslint/no-deprecated": "error", // Using patched version via compat/no-deprecated
+      '@typescript-eslint/no-explicit-any': 'error', '@typescript-eslint/no-unused-vars': ['error', {
+        'caughtErrors': 'all',
       }],
     },
     linterOptions: {
-      noInlineConfig: true, // DO NOT TOUCH THIS LINE
-      reportUnusedDisableDirectives: true, // DO NOT EDIT THAT LINE
+      noInlineConfig: true,
+      reportUnusedDisableDirectives: true,
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-      'import/resolver': {
-        typescript: {},
-        node: {}
-      }
+  },
+  {
+    files: ['vite.config.ts'],
+    languageOptions: {
+      ecmaVersion: "latest",
+      globals: globals.node,
+      parser: tsparser,
+    },
+    rules: {
+      ...eslint.configs.recommended.rules,
     },
   },
 );

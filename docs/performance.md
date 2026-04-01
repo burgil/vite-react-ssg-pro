@@ -347,7 +347,7 @@ Create `public/_headers`:
 
 ### Compression
 
-**Brotli** (automatic on Cloudflare/Vercel):
+**Brotli** (automatic on Cloudflare):
 - 20% smaller than gzip
 - Enabled by default on modern hosts
 

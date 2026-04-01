@@ -129,7 +129,7 @@ async def generate_images(host: str, port: int, seo_path: str, out_dir: str, ove
     # Handle overwrite prompt if there are existing files and not already set to overwrite
     if not overwrite and existing_count > 0:
         # Prompt with a 10-second timeout that defaults to 'Y' (skip overwriting).
-        prompt_text = f"{Colors.YELLOW}[?] Found {existing_count} existing OG image(s). Skip overwriting them? (Y/n):{Colors.RESET} "
+        prompt_text = f"{Colors.GREEN}[?] Found {existing_count} existing OG image(s). Skip generating new ones? (Y/n):{Colors.RESET} "
         print(prompt_text, end='', flush=True)
 
         def timed_prompt(prompt: str, timeout: float = 10.0, default: str = 'y') -> str:
