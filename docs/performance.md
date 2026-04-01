@@ -65,7 +65,7 @@ Google's ranking factors:
 <img src="..." width="400" height="300" />
 
 // ✅ Reserve space for dynamic content
-<div className="min-h-[200px]">
+<div className="min-h-50">
   {loading ? <Spinner /> : <Content />}
 </div>
 
