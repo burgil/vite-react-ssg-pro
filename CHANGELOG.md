@@ -5,7 +5,7 @@
 ### Dependencies
 - Upgraded **Vite** from `^7.3.0` to `^8.0.3`
 - Upgraded **TypeScript** from `~5.9.3` to `~6.0.2`
-- Upgraded **ESLint** from `^9.39.2` to `^10.1.0` (and `@eslint/js` accordingly)
+- Upgraded **ESLint** from `^9.39.2` to `^10.1.0` (and `@eslint/js` from `^9.39.2` to `^10.0.1`)
 - Upgraded **Knip** from `^5.79.0` to `^6.1.1`
 - Upgraded **Tailwind CSS** from `^4.1.18` to `^4.2.2` (and `@tailwindcss/vite` accordingly)
 - Upgraded **Framer Motion** from `^12.23.26` to `^12.38.0`
@@ -23,32 +23,45 @@
 - Upgraded **`@typescript-eslint/parser`** and **`typescript-eslint`** from `^8.51.0` to `^8.58.0`
 - Upgraded **`eslint-plugin-react-refresh`** from `^0.4.26` to `^0.5.2`
 - Upgraded **`vite-plugin-qrcode`** from `^0.3.0` to `^0.4.1`
+- Upgraded **`vite-plugin-inspect`** to `12.0.0-beta.1`
 - Upgraded **Wrangler** from `^4.54.0` to `^4.79.0`
 - Upgraded **pnpm** from `10.26.2` to `10.33.0`
-- Replaced **`@vitejs/plugin-react-swc`** with **`@vitejs/plugin-react`** (Babel-based)
-- Removed **`lightningcss`** (no longer used for CSS minification)
-- Removed **`vite-plugin-checker`** (TypeScript/ESLint checking now handled via dedicated lint script)
+- Replaced **`@vitejs/plugin-react-swc`** with **`@vitejs/plugin-react`** `^6.0.1` (switched from SWC to Babel-based transform)
+- Removed **`lightningcss`** (CSS minification no longer explicitly configured)
+- Removed **`vite-plugin-checker`** (TypeScript/ESLint overlay checking replaced by dedicated `scripts/lint.ts`)
 - Removed **`@swc/core`** from `pnpm-workspace.yaml` `onlyBuiltDependencies` (no longer installed)
 
+### Added
+- **`scripts/lint.ts`**: New full-featured lint orchestrator replacing the old inline shell `lint` command. Runs ESLint, TypeScript (`tsc -b`), and Knip+depcheck checks, with support for running individual checks via CLI flags (`--eslint`, `--ts`, `--unused`). Collects ESLint JSON output and distributes per-file error reports into `src-errors/` as `.txt` files mirroring the source tree. Also generates `errors.html` — an interactive HTML report with Tailwind CDN, search, severity filters, and copy-to-clipboard features. Writes timestamped status to `errors-eslint.log`, `errors-ts.log`, and `errors-unused.log`.
+- **`scripts/asset-hooks.mjs`**: New Node.js ESM module hook registered in `prerender.ts` via `node:module` register API. Stubs binary asset imports (`.mp3`, `.mp4`, `.png`, `.webp`, `.svg`, `.woff2`, `.ttf`, etc.) during SSR prerendering so Node.js doesn't attempt to load them as ES modules (Vite transforms these to hashed URL strings at build time).
+- Added `@emails` path alias in `vite.config.ts` resolving to `./emails`.
+- Added `server.host: true` and `server.strictPort: true` to `vite.config.ts` for LAN access and predictable port binding during development.
+- Added commented-out `wranglerPagesFunctionsDev` plugin stub in `vite.config.ts` for optional Cloudflare Functions proxy during local development.
+- Added `tsBuildInfoFile: ./node_modules/.tmp/tsconfig.node.tsbuildinfo` to `tsconfig.node.json` for incremental TypeScript build caching.
+- Added `errors.html`, `errors-unused.log`, `errors-ts.log`, `errors-eslint.log`, and `src-errors/` to `.gitignore` (lint output artifacts).
+- Added dedicated `unused` script to `package.json` (`knip --production --dependencies --files --exports --include-entry-exports && depcheck`), separate from the main `lint` script.
+
 ### Changed
-- **`lint` script** split into separate concerns: `lint` now runs `tsx scripts/lint.ts` (custom orchestrator), and a dedicated `unused` script runs Knip + depcheck independently.
-- **`og-screenshots` script** port changed from `4173` (preview server) to `5173` (dev server).
-- **`scripts/lint.ts`**: New custom lint orchestrator script replacing the old inline `lint` shell command; runs ESLint, TypeScript, and unused-dependency checks with structured output.
-- **`scripts/asset-hooks.mjs`**: New Node.js module hook that stubs binary asset imports (images, fonts, audio) during SSR prerendering so Node.js doesn't try to load them as ES modules.
-- **`vite.config.ts`**: Removed `cssMinify: 'lightningcss'`, increased `chunkSizeWarningLimit` from 1280 to 2000, disabled `esbuild.drop` block, added `server.host: true` and `server.strictPort: true`, added `@emails` path alias, removed `vite-plugin-checker` plugin.
-- **ESLint config** (`eslint.config.mjs`): Migrated to ESLint 10 flat config style with `projectService: true`, added compatibility shim (`compat/no-deprecated`) to patch `@typescript-eslint/no-deprecated` crash in ESLint 10, consolidated `react-hooks` and `import` plugin registrations into the main config block, removed `DO NOT EDIT` comments, added `css: 'always'` to `import/extensions` pattern.
-- **`tsconfig.node.json`**: Added `tsBuildInfoFile` pointing to `./node_modules/.tmp/tsconfig.node.tsbuildinfo` for incremental build caching.
-- **`.gitignore`**: Added `errors.html`, `errors-unused.log`, `errors-ts.log`, `errors-eslint.log`, `src-errors`, and removed `.vercel` and `next-env.d.ts` entries.
+- **`lint` script**: Changed from an inline shell command running ESLint, tsc, and Knip sequentially to `tsx scripts/lint.ts` (the new orchestrator with parallel execution and HTML reporting).
+- **`og-screenshots` script**: Changed port from `4173` (Vite preview) to `5173` (Vite dev server).
+- **`vite.config.ts`**: Removed `cssMinify: 'lightningcss'`, increased `chunkSizeWarningLimit` from `1280` to `2000`, removed `vite-plugin-checker` plugin, disabled `esbuild.drop`/`target` block (commented out).
+- **ESLint config** (`eslint.config.mjs`): Migrated to ESLint 10 flat config structure. Moved `eslint.configs.recommended` and `tseslint.configs.recommended` to top-level spreads. Switched from `project: [...]` to `projectService: true` for type-aware linting. Added `compatibilityPlugin` shim that proxies `context.parserOptions` to fix `@typescript-eslint/no-deprecated` crash in ESLint 10 (exposed as `compat/no-deprecated`). Consolidated `react-hooks`, `import`, and `eslint-comments` plugin registrations into the single main config block. Removed all `// DO NOT EDIT` comments. Added `css: 'always'` to `import/extensions` pattern. Removed `pathGroupOverrides` for `three/**`. Moved `vite.config.ts`-specific block to the end. Removed `importPlugin.flatConfigs.recommended` top-level spread (rules now inlined).
+- **`src/seo.json`**: Changed `social` URLs from real accounts to generic example placeholders (`https://x.com/example`, `https://github.com/example`, `https://linkedin.com/company/example`, `https://youtube.com/@example`) so the template ships without real author social handles.
+- **Footer (`src/components/Footer.tsx`)**: Removed YouTube social button and `FaYoutube` import. Simplified footer credit from "Made with ♥ by Burgil AKA GenZ v1 Dev" to "Made with ♥ by Burgil".
+- **Navbar (`src/components/Navbar.tsx`)**: Removed YouTube icon button from desktop nav and YouTube text link from mobile menu. Removed `FaYoutube` import.
+- **OG screenshot prompt**: Clarified prompt text in `scripts/generate_og_screenshots.py` from "Skip overwriting them?" to "Skip generating new ones?" for clarity.
+- **`public/images/og/og-home.webp`**: Regenerated OG home image (reduced from 40334 to 38896 bytes).
+- **AI agent instructions** (`.agent/rules/instructions.md`, `.github/copilot-instructions.md`): Removed YouTube from listed social links so AI agents don't reference it when generating content.
 
 ### Fixed
-- **`scripts/prerender.ts`**: Removed duplicate `return ''` statement in MIME type detection, fixed `@/` alias resolution (now correctly strips the `@` prefix and resolves to `src/`), added skip logic for dynamic routes (`:param`), added `process.exit(1)` on render errors to fail fast instead of silently continuing, added polyfills for `navigator`, `location`, `DOMMatrix`, `DOMRect`, `DOMPoint`, `SVGElement`, `HTMLElement`, `Element` globals in the Happy DOM environment, suppressed `useLayoutEffect` server warning, registered Node.js module hook (`asset-hooks.mjs`) to stub binary asset imports during SSR.
-- Fixed indentation of `console.warn` call for missing CSS file path in `scripts/prerender.ts`.
+- **`scripts/prerender.ts`**: Fixed `@/` alias resolution — imports using `@/foo` now correctly resolve to `src/foo` (previously the `@` prefix was not stripped, breaking component path lookup). Added skip logic for dynamic routes containing `:param` segments (warns and continues instead of producing broken output). Added `process.exit(1)` in both `onError` and the outer `catch` block so prerender failures are surfaced immediately rather than silently ignored. Added polyfills for `navigator`, `location`, `DOMMatrix`, `DOMRect`, `DOMPoint`, `SVGElement`, `HTMLElement`, and `Element` globals required by component libraries in the Happy DOM environment. Suppressed spurious `useLayoutEffect does nothing on the server` console errors during SSR. Registered `scripts/asset-hooks.mjs` via `node:module` register at the top of the file to stub binary asset imports before any component code runs.
+- **`scripts/prerender.ts`**: Removed duplicate `return ''` in MIME type detection function. Fixed trailing-whitespace indentation on `console.warn` for missing CSS file path. Removed trailing whitespace on several blank lines.
 
 ### Removed
-- **Hero component**: Removed "Free Version" button linking to `github.com/burgil/create-app` and associated disclaimer text; removed `FaGithub` import from `react-icons/fa`.
-- **Docs**: Removed Vercel, Netlify, GitHub Pages, AWS S3/CloudFront, and Docker deployment sections from `docs/deployment.md`; removed Vercel/Netlify-specific DNS, rollback, and SPA routing entries. Removed Vercel analytics example and Clerk/Contentful integration examples from `docs/customization.md`. Removed Vercel monitoring section from `docs/architecture.md`. Updated all Brotli references from "Cloudflare/Vercel" to "Cloudflare" only.
-- **License/TOS/README**: Removed all references to the legacy free MIT version (`github.com/burgil/create-app`); updated copyright year to 2026; corrected TOS support issue tracker URL to `github.com/burgil/vite-react-ssg-pro/issues`; narrowed deployment options to Cloudflare Pages only.
-- **OG screenshot script**: Clarified prompt text from "Skip overwriting" to "Skip generating new ones".
+- **Hero component** (`src/components/Hero.tsx`): Removed "Free Version" CTA button (linking to `github.com/burgil/create-app`) and its disclaimer text ("Free version does not include support or updates"). Removed `FaGithub` import from `react-icons/fa` (no longer used in Hero after button removal).
+- **YouTube links**: Removed all YouTube (`@GenZv1Dev`) references from `Footer`, `Navbar`, `README.md`, `.agent/rules/instructions.md`, `.github/copilot-instructions.md`, and `docs/seo-guide.md` (sameAs array).
+- **Docs — non-Cloudflare platforms**: Removed full Vercel, Netlify, GitHub Pages, AWS S3+CloudFront, and Docker deployment sections from `docs/deployment.md`. Removed Vercel/Netlify-specific DNS records, rollback instructions, and SPA routing redirect rules. Removed Vercel analytics (`@vercel/analytics`) example from `docs/customization.md`. Removed Clerk auth and Contentful CMS integration examples from `docs/customization.md`. Removed Vercel analytics monitoring section from `docs/architecture.md`. Updated all "Cloudflare/Vercel" Brotli references to "Cloudflare" only in `docs/performance.md`.
+- **License / TOS / README**: Removed all references to the legacy free MIT version (`github.com/burgil/create-app`) from `LICENSE.txt`, `TOS.md`, `README.md`, and `Hero`. Updated copyright year from 2025 to 2026. Corrected TOS support issue tracker URL to `github.com/burgil/vite-react-ssg-pro/issues`. Narrowed deployment platform list in README to Cloudflare Pages only. Removed `@GenZv1Dev` YouTube handle from README community section.
 
 ## [1.5.0] - 2026-01-05
 

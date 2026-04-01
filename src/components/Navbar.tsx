@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { FaGithub, FaYoutube } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { m as motion } from 'framer-motion';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
@@ -59,17 +59,6 @@ export default function Navbar() {
               >
                 <FaGithub className="w-5 h-5" />
               </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="text-gray-700 hover:text-purple-600 transition-colors"
-                href="https://youtube.com/@GenZv1Dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-              >
-                <FaYoutube className="w-5 h-5" />
-              </motion.a>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -118,7 +107,6 @@ export default function Navbar() {
               ))}
               <div className="flex gap-6 items-center pt-4 border-t border-gray-200">
                 <a href="https://github.com/burgil" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-purple-600">GitHub</a>
-                <a href="https://youtube.com/@GenZv1Dev" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-purple-600">YouTube</a>
               </div>
             </div>
           </div>

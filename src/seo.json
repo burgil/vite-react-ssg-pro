@@ -8,10 +8,10 @@
     "twitterCard": "summary_large_image",
     "logo": "/images/logo.webp",
     "social": {
-      "twitter": "https://x.com/burgil",
-      "github": "https://github.com/burgil",
-      "linkedin": "https://linkedin.com/company/burgil",
-      "youtube": "https://youtube.com/@GenZv1Dev"
+      "twitter": "https://x.com/example",
+      "github": "https://github.com/example",
+      "linkedin": "https://linkedin.com/company/example",
+      "youtube": "https://youtube.com/@example"
     },
     "contact": {
       "email": "contact@vite-react-ssg-pro.pages.dev",

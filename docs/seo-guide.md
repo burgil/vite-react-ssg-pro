@@ -77,8 +77,7 @@ Rich snippets in search results:
   "url": "https://example.com",
   "logo": "https://example.com/images/logo.webp",
   "sameAs": [
-    "https://github.com/burgil",
-    "https://youtube.com/@GenZv1Dev"
+    "https://github.com/burgil"
   ]
 }
 ```

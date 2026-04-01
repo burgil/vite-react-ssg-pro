@@ -1,4 +1,4 @@
-import { FaGithub, FaYoutube } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { m as motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
@@ -29,22 +29,11 @@ export default function Footer() {
               >
                 <FaGithub className="w-5 h-5" />
               </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                whileTap={{ scale: 0.9 }}
-                href="https://youtube.com/@GenZv1Dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-700 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow"
-                aria-label="YouTube"
-              >
-                <FaYoutube className="w-5 h-5" />
-              </motion.a>
             </div>
 
             {/* Copyright */}
             <div className="text-gray-600 text-sm order-3 flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Burgil AKA GenZ v1 Dev
+              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Burgil
             </div>
           </div>
         </div>

@@ -204,7 +204,6 @@ Perfect for:
 ## 🌟 Community & Support
 
 - **GitHub**: [@burgil](https://github.com/burgil)
-- **YouTube**: [@GenZv1Dev](https://youtube.com/@GenZv1Dev)
 - **Commercial Support**: Priority support for license holders
 
 ---
