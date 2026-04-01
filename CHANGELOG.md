@@ -41,7 +41,6 @@
 ### Added
 - **`scripts/lint.ts`**: New full-featured lint orchestrator replacing the old inline shell `lint` command. Runs ESLint, TypeScript (`tsc -b`), and Knip+depcheck checks, with support for running individual checks via CLI flags (`--eslint`, `--ts`, `--unused`). Collects ESLint JSON output and distributes per-file error reports into `src-errors/` as `.txt` files mirroring the source tree. Also generates `errors.html` - an interactive HTML report with Tailwind CDN, search, severity filters, and copy-to-clipboard features. Writes timestamped status to `errors-eslint.log`, `errors-ts.log`, and `errors-unused.log`.
 - **`scripts/asset-hooks.mjs`**: New Node.js ESM module hook registered in `prerender.ts` via `node:module` register API. Stubs binary asset imports (`.mp3`, `.mp4`, `.png`, `.webp`, `.svg`, `.woff2`, `.ttf`, etc.) during SSR prerendering so Node.js doesn't attempt to load them as ES modules (Vite transforms these to hashed URL strings at build time).
-- Added `@emails` path alias in `vite.config.ts` resolving to `./emails`.
 - Added `server.host: true` and `server.strictPort: true` to `vite.config.ts` for LAN access and predictable port binding during development.
 - Added commented-out `wranglerPagesFunctionsDev` plugin stub in `vite.config.ts` for optional Cloudflare Functions proxy during local development.
 - Added `tsBuildInfoFile: ./node_modules/.tmp/tsconfig.node.tsbuildinfo` to `tsconfig.node.json` for incremental TypeScript build caching.
