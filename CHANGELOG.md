@@ -59,9 +59,9 @@
 
 ### Removed
 - **Hero component** (`src/components/Hero.tsx`): Removed "Free Version" CTA button (linking to `github.com/burgil/create-app`) and its disclaimer text ("Free version does not include support or updates"). Removed `FaGithub` import from `react-icons/fa` (no longer used in Hero after button removal).
-- **YouTube links**: Removed all YouTube (`@GenZv1Dev`) references from `Footer`, `Navbar`, `README.md`, `.agent/rules/instructions.md`, `.github/copilot-instructions.md`, and `docs/seo-guide.md` (sameAs array).
+- **YouTube links**: Removed all YouTube references from `Footer`, `Navbar`, `README.md`, `.agent/rules/instructions.md`, `.github/copilot-instructions.md`, and `docs/seo-guide.md` (sameAs array).
 - **Docs — non-Cloudflare platforms**: Removed full Vercel, Netlify, GitHub Pages, AWS S3+CloudFront, and Docker deployment sections from `docs/deployment.md`. Removed Vercel/Netlify-specific DNS records, rollback instructions, and SPA routing redirect rules. Removed Vercel analytics (`@vercel/analytics`) example from `docs/customization.md`. Removed Clerk auth and Contentful CMS integration examples from `docs/customization.md`. Removed Vercel analytics monitoring section from `docs/architecture.md`. Updated all "Cloudflare/Vercel" Brotli references to "Cloudflare" only in `docs/performance.md`.
-- **License / TOS / README**: Removed all references to the legacy free MIT version (`github.com/burgil/create-app`) from `LICENSE.txt`, `TOS.md`, `README.md`, and `Hero`. Updated copyright year from 2025 to 2026. Corrected TOS support issue tracker URL to `github.com/burgil/vite-react-ssg-pro/issues`. Narrowed deployment platform list in README to Cloudflare Pages only. Removed `@GenZv1Dev` YouTube handle from README community section.
+- **License / TOS / README**: Removed all references to the legacy free MIT version (`github.com/burgil/create-app`) from `LICENSE.txt`, `TOS.md`, `README.md`, and `Hero`. Updated copyright year from 2025 to 2026. Corrected TOS support issue tracker URL to `github.com/burgil/vite-react-ssg-pro/issues`. Narrowed deployment platform list in README to Cloudflare Pages only. Removed old YouTube handle from README community section.
 
 ## [1.5.0] - 2026-01-05
 
