@@ -1,13 +1,7 @@
 import { defineConfig, type PluginOption, type UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-// import checker from "vite-plugin-checker";
-import Inspect from "vite-plugin-inspect";
-import { qrcode } from "vite-plugin-qrcode";
-import { visualizer } from "rollup-plugin-visualizer";
-// import wranglerPagesFunctionsDev from './scripts/wrangler';
 import path from "path";
 import tailwindcss from '@tailwindcss/vite';
-// import reactScan from '@react-scan/vite-plugin-react-scan';
 
 /* ========================================
  * 🔧 GLOBAL PROJECT CONFIGURATION
@@ -79,41 +73,9 @@ const PROJECT_CONFIG = {
 
 /* https://vitejs.dev/config/ */
 export default defineConfig(() => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const enableAnalyzer = process.env.ANALYZE === 'true';
-
   const possiblePlugins: (PluginOption | false | undefined)[] = [
     react(),
     tailwindcss(),
-    !isProduction && Inspect(),
-    !isProduction && qrcode(),
-    enableAnalyzer && visualizer({
-      filename: 'stats.html',
-      gzipSize: true,
-      brotliSize: true,
-      template: 'sunburst',
-    }),
-    // Proxy Cloudflare Functions during development for seamless API integration without CORS issues (Ask me about this setup if you're not familiar - it's a game-changer for local development with serverless functions!)
-    // !process.argv.includes('build') && wranglerPagesFunctionsDev({
-    //   matchRoutes: [/^\/api/, /^\/files/],
-    //   displayWranglerLogs: true,
-    // }),
-    // checker({
-    //   typescript: {
-    //     root: '.',
-    //     tsconfigPath: './tsconfig.json',
-    //     buildMode: true,
-    //   },
-    //   overlay: {
-    //     initialIsOpen: false,
-    //     position: 'br',
-    //   },
-    //   terminal: true,
-    //   eslint: {
-    //     lintCommand: 'eslint .',
-    //     useFlatConfig: true
-    //   }
-    // })
   ];
 
   const sharedPlugins = possiblePlugins.filter((plugin): plugin is PluginOption => Boolean(plugin));
@@ -174,10 +136,6 @@ export default defineConfig(() => {
       }
     },
     plugins: sharedPlugins,
-    // esbuild: {
-    //   drop: isProduction ? ['debugger'] : [],
-    //   target: 'esnext',
-    // },
     server: {
       host: false,
       strictPort: true,
@@ -186,6 +144,7 @@ export default defineConfig(() => {
       },
     },
     resolve: {
+      tsconfigPaths: true,
       alias: {
         "@": path.resolve(import.meta.dirname, "./src"),
       },
