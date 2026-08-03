@@ -42,9 +42,8 @@ const tasks: LintTask[] = [
   {
     id: '--eslint',
     name: 'ESLint',
-    command: 'npx',
+    command: 'eslint',
     args: [
-      'eslint',
       '.',
       '--format',
       'json',
@@ -56,8 +55,8 @@ const tasks: LintTask[] = [
   {
     id: '--ts',
     name: 'TypeScript',
-    command: 'npx',
-    args: ['tsc', '-b'],
+    command: 'tsc',
+    args: ['-b'],
     logFile: 'errors-ts.log',
   },
   {

@@ -179,7 +179,7 @@ export default defineConfig(() => {
     //   target: 'esnext',
     // },
     server: {
-      host: true,
+      host: false,
       strictPort: true,
       warmup: {
         clientFiles: PROJECT_CONFIG.warmupFiles,
@@ -187,11 +187,11 @@ export default defineConfig(() => {
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
+        "@": path.resolve(import.meta.dirname, "./src"),
       },
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     },
   };
-
+  
   return config;
 });

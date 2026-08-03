@@ -32,7 +32,7 @@
     }
   },
   "/": {
-    "title": "Vite React SSG Pro - React 19 Template",
+    "title": "Vite React SSG Pro42 - React 19 Template",
     "description": "Production-ready Vite + React 19 template with SSG, achieving 100/100 PageSpeed scores out of the box.",
     "keywords": "vite,react,ssg,template,react19,typescript,tailwind",
     "canonical": "https://vite-react-ssg-pro.pages.dev/",
@@ -53,7 +53,7 @@
     }
   },
   "/about": {
-    "title": "About - Vite React SSG Pro",
+    "title": "About43 - Vite React SSG Pro",
     "description": "About this production-ready React 19 template and how to use it.",
     "keywords": "vite,react,template,ssg,about",
     "canonical": "https://vite-react-ssg-pro.pages.dev/about",

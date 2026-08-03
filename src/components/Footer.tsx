@@ -16,6 +16,7 @@ export default function Footer() {
               <Link to="/cookiepolicy" className="text-gray-600 hover:text-purple-600 transition-colors">Cookie Policy</Link>
             </div>
 
+            <h1>hello world</h1>
             {/* Social Links */}
             <div className="flex gap-4 order-1 md:order-2">
               <motion.a

@@ -9,7 +9,8 @@ register(new URL('./asset-hooks.mjs', import.meta.url));
 import { createElement } from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { PassThrough } from 'stream';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, Routes, Route } from 'react-router';
+import { LazyMotion, domAnimation } from 'framer-motion';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -22,6 +23,10 @@ const __dirname = path.dirname(__filename);
 // Read the base index.html template
 const templatePath = path.resolve(__dirname, '../dist/index.html');
 const templateHTML = fs.readFileSync(templatePath, 'utf-8');
+if (!templateHTML.includes('<div id="root"></div>')) {
+    console.error('❌ dist/index.html already contains prerendered content (no empty <div id="root"></div>). Run "vite build" first - prerendering is not idempotent.');
+    process.exit(1);
+}
 
 // Read SEO configuration
 const seoConfigPath = path.resolve(__dirname, '../src/seo.json');
@@ -46,6 +51,16 @@ const colors = {
     blue: '\x1b[34m',
     magenta: '\x1b[35m',
 };
+
+// Layout is imported lazily (after happy-dom globals are set up) and cached across routes
+let layoutPromise: Promise<any> | null = null;
+function loadLayout(): Promise<any> {
+    if (!layoutPromise) {
+        const layoutPath = path.resolve(__dirname, '../src/Layout.tsx').replace(/\\/g, '/');
+        layoutPromise = import(`file:///${layoutPath}`).then((m) => m.default);
+    }
+    return layoutPromise;
+}
 
 interface RouteConfig {
     path: string;
@@ -402,20 +417,44 @@ async function prerenderRoute(route: RouteConfig): Promise<void> {
             throw new Error(`No default export found in ${route.componentPath}`);
         }
 
+        const Layout = await loadLayout();
+        if (!Layout) {
+            throw new Error('No default export found in src/Layout.tsx');
+        }
+
+        // Mirror the app's route tree (Router.tsx): pages render inside <Layout> via <Outlet>,
+        // so the prerendered HTML includes the Navbar and Footer. LazyMotion matches main.tsx.
+        const pageRoute = route.path === '/'
+            ? createElement(Route, { index: true, element: createElement(Component) })
+            : createElement(Route, { path: route.path.replace(/^\//, ''), element: createElement(Component) });
+
         const element = createElement(
-            MemoryRouter,
-            { initialEntries: [route.path] },
-            createElement(Component)
+            LazyMotion,
+            { features: domAnimation },
+            createElement(
+                MemoryRouter,
+                { initialEntries: [route.path] },
+                createElement(
+                    Routes,
+                    null,
+                    createElement(Route, { path: '/', element: createElement(Layout) }, pageRoute)
+                )
+            )
         );
 
         const appHtml = await new Promise<string>((resolve, reject) => {
             let didError = false;
+            let piped = false;
 
             const pipeable = renderToPipeableStream(element, {
                 onShellReady() {
                     // We wait for onAllReady so Suspense boundaries are resolved
                 },
                 onAllReady() {
+                    // React may invoke onAllReady more than once with nested Suspense boundaries,
+                    // but the stream can only be piped once.
+                    if (piped) return;
+                    piped = true;
                     // console.log(`${colors.green}🔀 Suspense ready for ${route.path}${colors.reset}`);
                     const body = new PassThrough();
                     pipeable.pipe(body);
